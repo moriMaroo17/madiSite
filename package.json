@@ -1,0 +1,23 @@
+{
+  "name": "madi_site",
+  "version": "1.0.0",
+  "description": "web app for independed and control works in MADI university",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "keywords": [
+    "webApp",
+    "express",
+    "hbs",
+    "university"
+  ],
+  "author": "moriMaroo17",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.2",
+    "nodemon": "^2.0.15"
+  }
+}
