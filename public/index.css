@@ -1,0 +1,19 @@
+.navbar {
+    margin: 10px;
+}
+
+.body-container {
+    margin: 20px;
+}
+
+.answers-table {
+    margin: 17px 0 17px 0
+}
+
+.add-answer-btn {
+    margin: 7px
+}
+
+.publish-task-btn {
+    margin: 7px 0 0 7px
+}

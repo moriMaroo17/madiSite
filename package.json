@@ -17,7 +17,10 @@
   "author": "moriMaroo17",
   "license": "ISC",
   "dependencies": {
+    "@handlebars/allow-prototype-access": "^1.0.5",
     "express": "^4.17.2",
-    "nodemon": "^2.0.15"
+    "express-handlebars": "^6.0.2",
+    "nodemon": "^2.0.15",
+    "url": "^0.11.0"
   }
 }
