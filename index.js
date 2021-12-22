@@ -1,10 +1,20 @@
 import express from 'express'
 import exhbs from 'express-handlebars'
 import { allowInsecurePrototypeAccess } from '@handlebars/allow-prototype-access'
+import { createRequire } from "module";
 import Handlebars from 'handlebars'
 import { fileURLToPath } from 'url'
 import path from 'path'
-import fs from 'fs'
+import mongoose from 'mongoose'
+
+import { homeRouter } from './routes/home.js'
+import { taskRouter } from './routes/task.js'
+import { authRouter } from './routes/auth.js'
+import { fileRouter } from './routes/file.js'
+
+const require = createRequire(import.meta.url);
+
+const keys = require('./keys/keys.json')
 
 const PORT = 5000
 
@@ -27,37 +37,25 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use('/docs', express.static(path.join(__dirname, 'docs')))
 app.use(express.urlencoded({ extended: true }))
 
-app.get('/', (req, res) => {
-    res.render('index', {
-        title: 'Главная страница'
-    })
-})
+app.use('/', homeRouter)
+app.use('/task', taskRouter)
+app.use('/auth', authRouter)
+app.use('/file', fileRouter)
 
-app.get('/add', (req, res) => {
-    res.render('add', {
-        title: 'Добавить задание'
-    })
-})
+function start() {
+    try {
+        mongoose.connect(keys.MONGODB_URI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        })
 
-app.get('/start', (req, res) => {
-    // console.log(req)
-    // console.log(`Query: ${JSON.stringify(req.query)}`)
-    // console.log(`Body: ${JSON.stringify(req.body)}`)
-    res.redirect(`task/${req.query.id}/${req.query.variant}`)
-})
+        app.listen(PORT, () => {
+            console.log(`listening on port ${PORT}`)
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
 
-app.get('/task/:id/:variant', (req, res) => {
-    res.render('task', {
-        title: `Работа ${req.params.id}`,
-        filePath: '../../file/example.pdf'
-    })
-})
-
-app.get('/file/:fileName', (req, res) => {
-    res.sendFile(path.join(__dirname, `docs/${req.params.fileName}`))
-})
-
-app.listen(PORT, () => {
-    console.log(`listening on port ${PORT}`)
-})
+start()
 
