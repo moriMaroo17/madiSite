@@ -25,6 +25,7 @@ app.set('views', 'views')
 
 app.use(express.static(path.join(__dirname, 'public')))
 app.use('/docs', express.static(path.join(__dirname, 'docs')))
+app.use(express.urlencoded({ extended: true }))
 
 app.get('/', (req, res) => {
     res.render('index', {
@@ -39,8 +40,9 @@ app.get('/add', (req, res) => {
 })
 
 app.get('/start', (req, res) => {
-    console.log(req.query)
-    console.log(req.body)
+    // console.log(req)
+    // console.log(`Query: ${JSON.stringify(req.query)}`)
+    // console.log(`Body: ${JSON.stringify(req.body)}`)
     res.redirect(`task/${req.query.id}/${req.query.variant}`)
 })
 
