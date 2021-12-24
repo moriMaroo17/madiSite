@@ -1,3 +1,4 @@
+import fs from 'fs'
 import { Router } from 'express'
 import Task from '../models/task.js'
 
@@ -45,9 +46,20 @@ router.post('/addContent', async (req, res) => {
         console.log(req.body)
         task.addSubTask({
             name: req.body.name,
-            filePath: req.body.filePath,
+            filePath: req.files.filePath.name,
             answer: req.body.answer
         })
+        if (req.files) {
+            let file = req.files.filePath
+            if (!fs.existsSync(`./docs/${task.name}/${req.body.name}/`)){
+                fs.mkdirSync(`./docs/${task.name}/${req.body.name}/`);
+            }
+            file.mv(`./docs/${task.name}/${req.body.name}/${req.files.filePath.name}`, (err) => {
+                if (err) {
+                    console.log(err)
+                }
+            })
+        }
         await task.save()
         res.redirect('/')
     } catch (error) {

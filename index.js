@@ -6,6 +6,7 @@ import Handlebars from 'handlebars'
 import { fileURLToPath } from 'url'
 import path from 'path'
 import mongoose from 'mongoose'
+import fileUpload from 'express-fileupload'
 
 import { homeRouter } from './routes/home.js'
 import { taskRouter } from './routes/task.js'
@@ -37,6 +38,7 @@ app.set('views', 'views')
 app.use(express.static(path.join(__dirname, 'public')))
 app.use('/docs', express.static(path.join(__dirname, 'docs')))
 app.use(express.urlencoded({ extended: true }))
+app.use(fileUpload())
 
 app.use('/', homeRouter)
 app.use('/task', taskRouter)
