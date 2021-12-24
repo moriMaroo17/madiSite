@@ -1,0 +1,57 @@
+<div class="form-group">
+    <form action="/task/edit" method="post" class="edit-form">
+        <div class="col-3">
+            <label class="form-label">Название работы</label>
+        </div>
+        <div class="col-6">
+            <input class="form-input" id="name" name="name" type="text" required value="{{data.name}}">
+        </div>
+        <div class="col-3">
+            <label class="form-label">Файл</label>
+        </div>
+        <div class="col-6">
+            <input class="form-input" id="filePath" name="filePath" type="file" value="{{data.filePath}}">
+        </div>
+
+        <input type="hidden" name="id" value="{{data.id}}">
+
+        <div class="col-6">
+            {{#if data.content.subTasks}}
+            <table class="table answers-table" id="answers">
+                <thead>
+                    <tr>
+                        {{!-- <th>Номер ответа</th> --}}
+                        <th>Текст вопроса</th>
+                        <th>Ответ</th>
+                        <th>Удалить</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {{#each data.content.subTasks}}
+                    <tr class="active">
+                        {{!-- <td name="id">1</td> --}}
+                        <td>{{name}}</td>
+                        <td>{{answer}}</td>
+                        <td><button class="btn btn-primary btn-action btn-lg"><i class="material-icons dp48">delete_forever</i></button>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+            {{else}}
+            <h3>Тем для работы еще не добавлено</h3>
+            {{/if}}
+        </div>
+        <button class="btn btn-success publish-task-btn">Опубликовать работу</button>
+    </form>
+
+    <form action="/task/{{data.id}}/addContent" method="get" class="edit-form">
+        {{!-- <input type="hidden" name="id" value="{{data.id}}"> --}}
+        <button class="btn btn-success publish-task-btn">Добавить тему</button>
+    </form>
+
+    <form action="task/{{data.id}}/delete" method="delete" class="edit-form">
+        <button class="btn btn-success publish-task-btn">Удалить работу</button>
+    </form>
+</div>

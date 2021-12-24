@@ -4,10 +4,10 @@
 
 .body-container {
     margin: 20px;
-}
+} */
 
 .answers-table {
-    margin: 17px 0 17px 0
+    padding-bottom: 20px;
 }
 
 .add-answer-btn {
@@ -15,9 +15,13 @@
 }
 
 .publish-task-btn {
-    margin: 7px 0 0 7px
-} */
+    margin-top: 10px;
+}
 
 .course-task {
     padding: 20px 10px 10px 10px
+}
+
+.edit-form {
+    padding: 10px 0 10px 0
 }

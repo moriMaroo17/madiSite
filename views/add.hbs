@@ -1,17 +1,18 @@
 <div class="form-group">
-    <div class="col-3">
-        <label class="form-label">Название работы</label>
-    </div>
-    <div class="col-6">
-        <input class="form-input" id="task-name" type="text">
-    </div>
-    <div class="col-3">
-        <label class="form-label">Файл</label>
-    </div>
-    <div class="col-6">
-        <input class="form-input" id="task-file" type="file">
-    </div>
-    <div class="col-6">
+    <form action="/add" method="post">
+        <div class="col-3">
+            <label class="form-label">Название работы</label>
+        </div>
+        <div class="col-6">
+            <input class="form-input" id="name" name="name" type="text" required>
+        </div>
+        <div class="col-3">
+            <label class="form-label">Файл</label>
+        </div>
+        <div class="col-6">
+            <input class="form-input" id="filePath" name="filePath" type="file">
+        </div>
+        {{!-- <div class="col-6">
         <table class="table answers-table" id="answers">
             <thead>
                 <tr>
@@ -42,7 +43,9 @@
                 <td><button class="btn btn-primary btn-action btn-lg"><i class="icon icon-cross"></i></button></td>
             </tr>
         </table>
-        <button class="btn add-answer-btn">Добавить ответ</button>
-    </div>
+        <button class="btn add-answer-btn">Добавить ответ</button> --}}
+    {{!-- </div> --}}
     <button class="btn btn-success publish-task-btn">Опубликовать задание</button>
+</form>
+
 </div>

@@ -11,6 +11,7 @@ import { homeRouter } from './routes/home.js'
 import { taskRouter } from './routes/task.js'
 import { authRouter } from './routes/auth.js'
 import { fileRouter } from './routes/file.js'
+import { addRouter } from './routes/add.js'
 
 const require = createRequire(import.meta.url);
 
@@ -41,6 +42,7 @@ app.use('/', homeRouter)
 app.use('/task', taskRouter)
 app.use('/auth', authRouter)
 app.use('/file', fileRouter)
+app.use('/add', addRouter)
 
 function start() {
     try {
