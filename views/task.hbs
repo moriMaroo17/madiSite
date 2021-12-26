@@ -1,2 +1,25 @@
-<h1>Успехов с выполнением задания</h1>
-<embed src="{{filePath}}" type="application/pdf" width="90%" height="800px" />
+<h1>{{taks.name}}</h1>
+<h2>Успехов с выполнением задания</h2>
+{{#if task.filePath}}
+<div>
+    <p>Для более удобного просмотра вы можете <a href="../{{task.filePath}}" download="{{task.name}}">скачать</a>
+        файл</p>
+
+</div>
+<embed src="../{{task.filePath}}" type="application/pdf" width="90%" height="800px" />
+{{else}}
+<p>Файл для работы не был добавлен</p>
+{{/if}}
+
+{{#if task.content.subTasks}}
+<p>Список тем</p>
+<hr>
+<ul class="collection">
+    {{#each task.content.subTasks}}
+    <li class="collection-item"><a href="/task/{{@root.task.id}}/subTask/{{id}}">{{name}}</a></li>
+    {{/each}}
+</ul>
+{{else}}
+<hr>
+<p>Тем для работы еще не добавлено</p>
+{{/if}}

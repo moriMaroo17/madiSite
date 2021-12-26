@@ -1,5 +1,5 @@
 <div class="form-group">
-    <form action="/task/edit" method="post" class="edit-form" enctype="multipart/form-data">
+    <form action="/task/edit" method="post" class="edit-form" enctype="multipart/form-data" id="editTaskForm">
         <div class="col-3">
             <label class="form-label">Название работы</label>
         </div>
@@ -14,13 +14,13 @@
         </div>
 
         <input type="hidden" name="id" value="{{data.id}}">
-
-        <div class="col-6">
-            {{#if data.content.subTasks}}
+    </form>
+    <div class="col-6">
+        {{#if data.content.subTasks}}
+        <div id="subTasksEditTable">
             <table class="table answers-table" id="answers">
                 <thead>
                     <tr>
-                        {{!-- <th>Номер ответа</th> --}}
                         <th>Текст вопроса</th>
                         <th>Ответ</th>
                         <th>Удалить</th>
@@ -30,28 +30,37 @@
                 <tbody>
                     {{#each data.content.subTasks}}
                     <tr class="active">
-                        {{!-- <td name="id">1</td> --}}
                         <td>{{name}}</td>
                         <td>{{answer}}</td>
-                        <td><button class="btn btn-primary btn-action btn-lg"><i class="material-icons dp48">delete_forever</i></button>
+                        <td>
+                            <form method="post" id="removeSubTaskForm" action="/task/removeSubTask">
+                                <input type="hidden" name="id" value="{{@root.data.id}}">
+                                <input type="hidden" name="subTaskId" value="{{id}}">
+                                <button class="btn btn-primary btn-action btn-lg" form="removeSubTaskForm">
+                                    <i class="material-icons dp48">delete_forever</i>
+                                </button>
+                            </form>
                         </td>
                     </tr>
                     {{/each}}
                 </tbody>
             </table>
-            {{else}}
-            <h3>Тем для работы еще не добавлено</h3>
-            {{/if}}
         </div>
-        <button class="btn btn-success publish-task-btn">Опубликовать работу</button>
-    </form>
+        {{else}}
+        <h3>Тем для работы еще не добавлено</h3>
+        {{/if}}
+    </div>
+
+    <button class="btn btn-success publish-task-btn" form="editTaskForm">Опубликовать работу</button>
+
 
     <form action="/task/{{data.id}}/addContent" method="get" class="edit-form">
         {{!-- <input type="hidden" name="id" value="{{data.id}}"> --}}
         <button class="btn btn-success publish-task-btn">Добавить тему</button>
     </form>
 
-    <form action="task/{{data.id}}/delete" method="delete" class="edit-form">
+    <form action="../../task/remove" method="post" class="edit-form">
+        <input type="hidden" name="id" value="{{data.id}}">
         <button class="btn btn-success publish-task-btn">Удалить работу</button>
     </form>
 </div>

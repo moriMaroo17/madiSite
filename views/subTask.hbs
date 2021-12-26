@@ -1,0 +1,25 @@
+<h1>{{subTaks.name}}</h1>
+<h2>Успехов с выполнением задания</h2>
+{{#if subTask.filePath}}
+<div>
+    <p>Для более удобного просмотра вы можете <a href="../{{subTask.filePath}}" download="{{subTask.name}}">скачать</a>
+        файл</p>
+
+</div>
+<embed src="../../../{{subTask.filePath}}" type="application/pdf" width="90%" height="800px" />
+{{else}}
+<p>Файл для работы не был добавлен</p>
+{{/if}}
+
+{{#if subTask.answer}}
+<form action="/answer" method="post" class="answer-form">
+    <div class="input-field col s6">
+        <input type="hidden" name="id" value="{{subTask.id}}">
+        <input placeholder="Введите ответ" id="answer" type="text" class="validate">
+        <label for="first_name">Ответ</label>
+    </div>
+    <button class="btn waves-effect waves-light" type="submit" name="action">Отправить ответ
+        <i class="material-icons right">send</i>
+    </button>
+</form>
+{{/if}}

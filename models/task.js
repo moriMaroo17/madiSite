@@ -21,12 +21,36 @@ const taskSchema = new mongoose.Schema({
     }
 })
 
-taskSchema.methods.addSubTask = function(subTask) {
+taskSchema.methods.addSubTask = function (subTask) {
     this.content.subTasks.push({
         name: subTask.name,
         filePath: subTask.filePath,
         answer: subTask.answer
     })
+}
+
+taskSchema.methods.getSubTaskById = function (id) {
+    for (let i = 0; i < this.content.subTasks.length; i++) {
+        if (this.content.subTasks[i].id === id) {
+            return this.content.subTasks[i]
+        }
+    }
+}
+
+taskSchema.methods.deleteSubTaskById = function (id) {
+    let subTasks = [...this.content.subTasks]
+    // const idx = subTasks.findIndex(subTask => subTask.id.toString() === id.toString())
+
+    // if (items[idx].count === 1) {
+    //     items = items.filter(c => c.courseId.toString() !== id.toString())
+    // } else {
+    //     items[idx].count--
+    // }
+
+    subTasks = subTasks.filter(subTask => subTask.id.toString() !== id.toString())
+
+    this.content.subTasks = {subTasks}
+    return this.save()
 }
 
 export default mongoose.model('Task', taskSchema)

@@ -11,25 +11,26 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-    console.log(req.body)
-    const task = new Task({
-        name: req.body.name,
-        filePath: `./docs/${req.body.name}/${req.files.filePath.name}`,
-        content: req.body.content
-    })
     try {
-        console.log(req.files)
+        if (!fs.existsSync(`./docs/${req.body.name}/`)){
+            fs.mkdirSync(`./docs/${req.body.name}/`);
+        }
         if (req.files) {
-            let file = req.files.filePath
-            if (!fs.existsSync(`./docs/${req.body.name}/`)){
-                fs.mkdirSync(`./docs/${req.body.name}/`);
-            }
+            let file = req.files.filePath 
             file.mv(`./docs/${req.body.name}/${req.files.filePath.name}`, (err) => {
                 if (err) {
                     console.log(err)
                 }
             })
+            var filePath = `./docs/${req.body.name}/${req.files.filePath.name}`
+        } else {
+            var filePath =''
         }
+        const task = new Task({
+            name: req.body.name,
+            filePath: filePath,
+            content: req.body.content
+        })
         await task.save()
         res.redirect(`task/${task.id}/edit`)
     } catch (error) {

@@ -43,7 +43,7 @@ app.use(fileUpload())
 app.use('/', homeRouter)
 app.use('/task', taskRouter)
 app.use('/auth', authRouter)
-app.use('/file', fileRouter)
+// app.use('/file', fileRouter)
 app.use('/add', addRouter)
 
 function start() {
