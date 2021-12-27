@@ -1,50 +1,17 @@
 <div class="form-group">
     <form action="/add" method="post" enctype="multipart/form-data">
-        <div class="col-3">
+        <div class="col s3">
             <label class="form-label">Название работы</label>
         </div>
-        <div class="col-6">
+        <div class="col s6">
             <input class="form-input" id="name" name="name" type="text" required>
         </div>
-        <div class="col-3">
+        <div class="col s3">
             <label class="form-label">Файл</label>
         </div>
-        <div class="col-6">
+        <div class="col s6">
             <input class="form-input" id="filePath" name="filePath" type="file">
         </div>
-        {{!-- <div class="col-6">
-        <table class="table answers-table" id="answers">
-            <thead>
-                <tr>
-                    <th>Номер ответа</th>
-                    <th>Текст вопроса</th>
-                    <th>Ответ</th>
-                    <th>Удалить</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="active">
-                    <td name="id">1</td>
-                    <td>Диаметр чего-то</td>
-                    <td>154.9</td>
-                    <td><button class="btn btn-primary btn-action btn-lg"><i class="icon icon-cross"></i></button></td>
-                </tr>
-            </tbody>
-            <tr class="active">
-                <td name="id">2</td>
-                <td>Скорость чего-то</td>
-                <td>15.43</td>
-                <td><button class="btn btn-primary btn-action btn-lg"><i class="icon icon-cross"></i></button></td>
-            </tr>
-            <tr class="active">
-                <td name="id">3</td>
-                <td>Ответ задачи</td>
-                <td>19357.4346</td>
-                <td><button class="btn btn-primary btn-action btn-lg"><i class="icon icon-cross"></i></button></td>
-            </tr>
-        </table>
-        <button class="btn add-answer-btn">Добавить ответ</button> --}}
-    {{!-- </div> --}}
     <button class="btn btn-success publish-task-btn">Опубликовать задание</button>
 </form>
 

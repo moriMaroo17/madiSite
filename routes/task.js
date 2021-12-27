@@ -31,6 +31,7 @@ router.post('/removeSubTask', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
         const task = await Task.findById(req.params.id)
+        console.log(task)
         res.render('task', {
             title: task.name,
             task: task,
@@ -75,11 +76,41 @@ router.get('/:id/edit', async (req, res) => {
     }
 })
 
-router.get('/:id/addContent', (req, res) => {
-    res.render('addContent', {
+router.get('/:id/:number', async (req, res) => {
+    try {
+        const task = await Task.findById(req.params.id)
+        console.log(task)
+        const variant = await task.getVariantByNumber(req.params.number)
+        console.log(variant)
+        res.render('editVariant', {
+            title: 'Редактировать вариант',
+            id: req.params.id,
+            variant
+        })
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+router.get('/:id/:number/addSubTask', async function (req, res) {
+    res.render('editSubTask', {
         title: 'Добавить тему',
-        id: req.params.id
+        subTask: {}
     })
+})
+
+router.post('/:id/addVariant', async (req, res) => {
+    try {
+        const task = await Task.findById(req.params.id)
+        task.variants.push({
+            number: req.body.number,
+            subTasks: []
+        })
+        await task.save()
+        res.redirect(`/task/${req.params.id}/${req.body.number}/`)
+    } catch (error) {
+        console.log(error)
+    }
 })
 
 router.post('/addContent', async (req, res) => {
