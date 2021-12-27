@@ -11,19 +11,15 @@
 <p>Файл для работы не был добавлен</p>
 {{/if}}
 
-{{!-- {{#if task.content.subTasks}} --}}
-{{#if task.variants}}
-<p>Список вариантов</p>
+{{#if task.content.subTasks}}
+<p>Список тем</p>
 <hr>
-{{#each task.variants}}
-<h4>Вариант {{number}}</h4>
 <ul class="collection">
-    {{#each subTasks}}
-    <li class="collection-item"><a href="/task/{{@root.task.id}}/{{@root.task.variants}}/{{id}}">{{name}}</a></li>
+    {{#each task.content.subTasks}}
+    <li class="collection-item"><a href="/task/{{@root.task.id}}/subTask/{{id}}">{{name}}</a></li>
     {{/each}}
 </ul>
-{{/each}}
 {{else}}
 <hr>
-<p>Вариантов с темами для работы еще не добавлено</p>
+<p>Тем для работы еще не добавлено</p>
 {{/if}}

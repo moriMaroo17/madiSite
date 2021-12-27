@@ -16,15 +16,7 @@
         <input type="hidden" name="id" value="{{data.id}}">
     </form>
     <div class="col-6">
-        {{#each data.variants}}
-        <div class="row">
-            <h3>Вариант {{number}}</h3>
-            <form action="/task/removeVariant" method="post" id="removeVariantForm{{@index}}">
-                <button class="btn btn-primary btn-action btn-lg" form="removeVariantForm{{@index}}">
-                    <i class="material-icons dp48">delete_forever</i>
-                </button>
-            </form>
-        </div>
+        {{#if data.content.subTasks}}
         <div id="subTasksEditTable">
             <table class="table answers-table" id="answers">
                 <thead>
@@ -36,7 +28,7 @@
                 </thead>
 
                 <tbody>
-                    {{#each subTasks}}
+                    {{#each data.content.subTasks}}
                     <tr class="active">
                         <td>{{name}}</td>
                         <td>{{answer}}</td>
@@ -56,24 +48,20 @@
             </table>
         </div>
         {{else}}
-        <h3>Вариантов с темами для работы еще не добавлено</h3>
-        {{/each}}
+        <h3>Тем для работы еще не добавлено</h3>
+        {{/if}}
     </div>
-
-    <form action="/task/{{data.id}}/addVariant" method="post" class="edit-form">
-        <div class="row">
-            <div class="col s3">
-                <input class="form-input" id="number" name="number" type="text" required>
-                <label class="form-label">Номер варианта</label>
-            </div>
-            <button class="btn btn-success publish-task-btn col s2">Добавить вариант</button>
-        </div>
-    </form>
 
     <button class="btn btn-success publish-task-btn" form="editTaskForm">Опубликовать работу</button>
 
+
+    <form action="/task/{{data.id}}/addContent" method="get" class="edit-form">
+        {{!-- <input type="hidden" name="id" value="{{data.id}}"> --}}
+        <button class="btn btn-success publish-task-btn">Добавить тему</button>
+    </form>
+
     <form action="../../task/remove" method="post" class="edit-form">
         <input type="hidden" name="id" value="{{data.id}}">
-        <button class="btn btn-success red publish-task-btn">Удалить работу</button>
+        <button class="btn btn-success publish-task-btn">Удалить работу</button>
     </form>
 </div>

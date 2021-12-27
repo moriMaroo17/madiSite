@@ -29,7 +29,7 @@ router.post('/', async (req, res) => {
         const task = new Task({
             name: req.body.name,
             filePath: filePath,
-            variants: []
+            content: req.body.content
         })
         await task.save()
         res.redirect(`task/${task.id}/edit`)
