@@ -7,11 +7,7 @@ const taskSchema = new mongoose.Schema({
         required: true
     },
     filePath: String,
-    variants: [{
-        number: {
-            type: Number,
-            required: true
-        },
+    content: {
         subTasks: [
             {
                 name: {
@@ -22,16 +18,8 @@ const taskSchema = new mongoose.Schema({
                 answer: String
             }
         ],
-    }]
-})
-
-taskSchema.methods.getVariantByNumber = function (number) {
-    for (let i = 0; i < this.variants.length; i++) {
-        if (this.variants[i].number.toString() === number.toString()) {
-            return this.variants[i];
-        }
     }
-}
+})
 
 taskSchema.methods.addSubTask = function (subTask) {
     this.content.subTasks.push({
