@@ -33,10 +33,11 @@
                         <td>{{name}}</td>
                         <td>{{answer}}</td>
                         <td>
-                            <form method="post" id="removeSubTaskForm" action="/task/removeSubTask">
+                            <form method="post" id="removeSubTaskForm{{@index}}" action="/task/removeSubTask">
                                 <input type="hidden" name="id" value="{{@root.data.id}}">
                                 <input type="hidden" name="subTaskId" value="{{id}}">
-                                <button class="btn btn-primary btn-action btn-lg" form="removeSubTaskForm">
+                                <input type="hidden" name="subTaskName" value="{{name}}">
+                                <button class="btn btn-primary btn-action btn-lg" form="removeSubTaskForm{{@index}}">
                                     <i class="material-icons dp48">delete_forever</i>
                                 </button>
                             </form>

@@ -18,13 +18,11 @@ router.post('/remove', async (req, res) => {
 })
 
 router.post('/removeSubTask', async (req, res) => {
-    console.log(req.body)
     try {
         const task = await Task.findById(req.body.id)
-        console.log(task)
-        fs.rmSync(`./docs/${task.name}/*`, {recursive: true, force: true})
+        fs.rmSync(`./docs/${task.name}/${req.body.subTaskName}`, {recursive: true, force: true})
         await task.deleteSubTaskById(req.body.subTaskId)
-        res.redirect(`/${req.body.id}/edit`)
+        res.redirect(`/task/${req.body.id}/edit`)
     } catch (error) {
         console.error(error)
     }
