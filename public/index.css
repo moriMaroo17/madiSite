@@ -21,3 +21,12 @@
 .edit-form {
     padding: 10px 0 10px 0
 }
+
+.edit-variant-on-main a {
+    color: white;
+    text-decoration: none
+}
+
+.edit-variant-on-main-form {
+    padding-bottom: 10px;
+}

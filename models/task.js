@@ -18,6 +18,7 @@ const taskSchema = new mongoose.Schema({
                     type: String,
                     required: true
                 },
+                description: String,
                 filePath: String,
                 answer: String
             }
@@ -28,31 +29,51 @@ const taskSchema = new mongoose.Schema({
 taskSchema.methods.getVariantByNumber = function (number) {
     for (let i = 0; i < this.variants.length; i++) {
         if (this.variants[i].number.toString() === number.toString()) {
-            return this.variants[i];
+            return this.variants[i]
         }
     }
 }
 
-taskSchema.methods.addSubTask = function (subTask) {
-    this.content.subTasks.push({
+taskSchema.methods.getVariantById = function (id) {
+    for (let i = 0; i < this.variants.length; i++) {
+        if (this.variants[i].id.toString() === id.toString()) {
+            return this.variants[i]
+        }
+    }
+}
+
+taskSchema.methods.addSubTask = function (number, subTask) {
+    const variant = this.getVariantByNumber(number)
+    variant.subTasks.push({
         name: subTask.name,
         filePath: subTask.filePath,
         answer: subTask.answer
     })
+
+    return this.save()
 }
 
-taskSchema.methods.getSubTaskById = function (id) {
-    for (let i = 0; i < this.content.subTasks.length; i++) {
-        if (this.content.subTasks[i].id === id) {
-            return this.content.subTasks[i]
+taskSchema.methods.getSubTaskById = function (variantId, subTaskId) {
+    const variant = this.getVariantById(variantId)
+    for (let i = 0; i < variant.subTasks.length; i++) {
+        if (variant.subTasks[i].id.toString() === subTaskId.toString()) {
+            return variant.subTasks[i]
         }
     }
 }
 
-taskSchema.methods.deleteSubTaskById = function (id) {
-    let subTasks = [...this.content.subTasks]
-    subTasks = subTasks.filter(subTask => subTask.id.toString() !== id.toString())
-    this.content.subTasks = subTasks
+taskSchema.methods.deleteSubTaskById = function (variantId, subTaskId) {
+    const variant = getVariantById(variantId)
+    let subTask = [...variant.subTasks]
+    subTasks = subTasks.filter(subTask => subTask.id.toString() !== subTaskId.toString())
+    variant.subTasks = subTasks
+    return this.save()
+}
+
+taskSchema.methods.deleteVariantById = function (id) {
+    let variants = [...this.variants]
+    variants = variants.filter(variant => variant.id.toString() !== id.toString())
+    this.variants = variants
     return this.save()
 }
 

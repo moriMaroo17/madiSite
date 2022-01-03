@@ -20,8 +20,9 @@ router.post('/remove', async (req, res) => {
 router.post('/removeSubTask', async (req, res) => {
     try {
         const task = await Task.findById(req.body.id)
+        console.log(task)
         fs.rmSync(`./docs/${task.name}/${req.body.subTaskName}`, {recursive: true, force: true})
-        await task.deleteSubTaskById(req.body.subTaskId)
+        await task.deleteSubTaskById(req.body.variantId, req.body.subTaskId)
         res.redirect(`/task/${req.body.id}/edit`)
     } catch (error) {
         console.error(error)
@@ -67,7 +68,7 @@ router.get('/:id/edit', async (req, res) => {
             data: {
                 name: task.name,
                 filePath: task.filePath,
-                content: task.content,
+                variants: task.variants,
                 id: req.params.id
             }
         })
@@ -113,9 +114,9 @@ router.post('/:id/addVariant', async (req, res) => {
     }
 })
 
-router.post('/addContent', async (req, res) => {
+router.post('/:id/:number/addSubTask', async (req, res) => {
     try {
-        const task = await Task.findById(req.body.id)
+        const task = await Task.findById(req.params.id)
         console.log(req.body)
         if (req.files) {
             let file = req.files.filePath
@@ -131,11 +132,48 @@ router.post('/addContent', async (req, res) => {
         } else {
             var filePath = ''
         }
-        await task.addSubTask({
+        await task.addSubTask(req.params.number, {
             name: req.body.name,
             filePath: filePath,
             answer: req.body.answer
         })
+        await task.save()
+        res.redirect('/')
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+router.post('/removeVariant', async (req, res) => {
+    try {
+        const task = await Task.findById(req.body.taskId)
+        console.log(task)
+        await task.deleteVariantById(req.body.variantId)
+        fs.rmSync(`./docs/${task.name}/${req.body.number}`, {recursive: true, force: true})
+        res.redirect(`/task/${req.body.taskId}/edit`)
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+router.post('/edit', async (req, res) => {
+    try {
+        let task = await Task.findById(req.body.id)
+        task.name = req.body.name
+        if (req.files) {
+            let file = req.files.filePath
+            if (!fs.existsSync(`./docs/${task.name}/${req.body.name}/`)){
+                fs.mkdirSync(`./docs/${task.name}/${req.body.name}/`);
+            }
+            file.mv(`./docs/${task.name}/${req.body.name}/${req.files.filePath.name}`, (err) => {
+                if (err) {
+                    console.log(err)
+                }
+            })
+            var filePath = `./docs/${task.name}/${req.body.name}/${req.files.filePath.name}`
+            task.filePath = filePath
+        }
+
         await task.save()
         res.redirect('/')
     } catch (error) {

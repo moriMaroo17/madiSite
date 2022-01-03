@@ -1,5 +1,5 @@
 <div class="form-group">
-    <form action="/task/addContent" method="post" enctype="multipart/form-data">
+    <form action="../addVariant" method="post" enctype="multipart/form-data" name="addVariantForm">
         <div class="col-3">
             <label class="form-label">Номер варианта</label>
         </div>
@@ -12,14 +12,8 @@
         <div class="col-6">
             <input class="form-input" id="filePath" name="filePath" type="file">
         </div>
-        {{!-- <div class="col-3">
-            <label class="form-label">Ответ</label>
-        </div> --}}
-        {{!-- <div class="col-6">
-            <input class="form-input" id="answer" name="answer" type="text">
-        </div> --}}
     </form>
-        {{#if subTasks}}
+        {{#if variant.subTasks}}
         <div id="subTasksEditTable">
             <table class="table answers-table" id="answers">
                 <thead>
@@ -31,15 +25,15 @@
                 </thead>
 
                 <tbody>
-                    {{#each subTasks}}
+                    {{#each variant.subTasks}}
                     <tr class="active">
                         <td>{{name}}</td>
                         <td>{{answer}}</td>
                         <td>
                             <form method="post" id="removeSubTaskForm{{@index}}" action="/task/removeSubTask">
-                                <input type="hidden" name="id" value="{{@root.data.id}}">
-                                <input type="hidden" name="subTaskId" value="{{id}}">
-                                <input type="hidden" name="subTaskName" value="{{name}}">
+                                <input type="hidden" name="id" value="{{@root.id}}">
+                                <input type="hidden" name="subTaskId" value="{{_id}}">
+                                <input type="hidden" name="variantId" value="{{@root.variant.id}}">
                                 <button class="btn btn-primary btn-action btn-lg" form="removeSubTaskForm{{@index}}">
                                     <i class="material-icons dp48">delete_forever</i>
                                 </button>
@@ -55,13 +49,13 @@
         {{/if}}
         <input type="hidden" name="id" value="{{id}}">
 
-        <form action="/task/{{data.id}}/addVariant" method="post" class="edit-form">
+        <form action="/task/{{id}}/{{variant.number}}/addSubTask" method="get" class="edit-form">
             <div class="row">
-                <button class="btn btn-success publish-task-btn col s2">Добавить тему</button>
+                <button class="btn btn-success publish-task-btn col s3">Добавить тему</button>
             </div>
         </form>
 
-        <button class="btn btn-success publish-task-btn">Опубликовать вариант</button>
+        <button class="btn btn-success publish-task-btn col s3" form="addVariantForm">Опубликовать вариант</button>
 
         {{!-- <form action="/task/{{data.id}}/addVariant" method="get" class="edit-form">
         <button class="btn btn-success publish-task-btn">Добавить вариант</button>

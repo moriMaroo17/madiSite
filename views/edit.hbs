@@ -17,14 +17,27 @@
     </form>
     <div class="col-6">
         {{#each data.variants}}
-        <div class="row">
+        <div class="col s6 edit-variant-on-main">
             <h3>Вариант {{number}}</h3>
-            <form action="/task/removeVariant" method="post" id="removeVariantForm{{@index}}">
-                <button class="btn btn-primary btn-action btn-lg" form="removeVariantForm{{@index}}">
-                    <i class="material-icons dp48">delete_forever</i>
+
+            <form action="/task/removeVariant" method="post" id="removeVariantForm{{@index}}"
+                class="edit-variant-on-main-form">
+                <input type="hidden" name="taskId" value="{{@root.data.id}}">
+                <input type="hidden" name="variantId" value="{{id}}">
+                <input type="hidden" name="number" value="{{number}}">
+                <button class="btn btn-primary red btn-action btn-lg" form="removeVariantForm{{@index}}">
+                    Удалить вариант
                 </button>
             </form>
+            
+            <a href="/task/{{@root.data.id}}/{{number}}">
+                <button class="btn btn-primary btn-action btn-lg">
+                    Редактировать вариант
+                </button>
+            </a>
+
         </div>
+        {{#if subTasks}}
         <div id="subTasksEditTable">
             <table class="table answers-table" id="answers">
                 <thead>
@@ -56,7 +69,10 @@
             </table>
         </div>
         {{else}}
-        <h3>Вариантов с темами для работы еще не добавлено</h3>
+        <h4>Тем для варианта еще не добавлено</h4>
+        {{/if}}
+        {{else}}
+        <h4>Вариантов с темами для работы еще не добавлено</h4>
         {{/each}}
     </div>
 
