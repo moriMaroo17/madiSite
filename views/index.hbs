@@ -8,12 +8,12 @@
         <div class="card darken-1">
             <div class="card-content">
                 <span class="card-title">{{name}}</span>
-                {{#if content.subTasks}}
-                <p>Список тем</p>
+                {{#if variants}}
+                <p>Список вариантов</p>
                 <hr>
                 <ul class="collection">
-                    {{#each content.subTasks}}
-                    <li class="collection-item">{{name}}</li>
+                    {{#each variants}}
+                    <li class="collection-item">{{number}}</li>
                     {{/each}}
                 </ul>
                 {{else}}
@@ -22,19 +22,15 @@
                 {{/if}}
             </div>
             <div class="card-action course-task">
-                <form action="task/{{id}}" method="get">
-                    <div class="input-field">
-                        <select class="browser-default" name="variant" id="variant">
-                            <option value="" disabled selected>Выберите вариант</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                        </select>
-                    </div>
-                    <button class="btn waves-effect waves-light">Submit
+                <a href="/task/{{id}}/">
+                    <button class="btn waves-effect waves-light">Открыть
                         <i class="material-icons right">send</i>
                     </button>
-                </form>
+                </a>
+
+                <a href="/task/{{id}}/edit/">
+                    <button class="btn waves-effect waves-light">Редактировать</button>
+                </a>
             </div>
         </div>
     </div>

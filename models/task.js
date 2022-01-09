@@ -12,13 +12,14 @@ const taskSchema = new mongoose.Schema({
             type: Number,
             required: true
         },
+        filePath: String,
         subTasks: [
             {
                 name: {
                     type: String,
                     required: true
                 },
-                description: String,
+                taskText: String,
                 filePath: String,
                 answer: String
             }
@@ -47,6 +48,7 @@ taskSchema.methods.addSubTask = function (number, subTask) {
     variant.subTasks.push({
         name: subTask.name,
         filePath: subTask.filePath,
+        taskText: subTask.taskText,
         answer: subTask.answer
     })
 
@@ -63,8 +65,8 @@ taskSchema.methods.getSubTaskById = function (variantId, subTaskId) {
 }
 
 taskSchema.methods.deleteSubTaskById = function (variantId, subTaskId) {
-    const variant = getVariantById(variantId)
-    let subTask = [...variant.subTasks]
+    const variant = this.getVariantById(variantId)
+    let subTasks = [...variant.subTasks]
     subTasks = subTasks.filter(subTask => subTask.id.toString() !== subTaskId.toString())
     variant.subTasks = subTasks
     return this.save()
@@ -75,6 +77,48 @@ taskSchema.methods.deleteVariantById = function (id) {
     variants = variants.filter(variant => variant.id.toString() !== id.toString())
     this.variants = variants
     return this.save()
+}
+
+taskSchema.methods.updateVaraintByNumber = function (oldNumber, newNumber, filePath) {
+    const variant = this.getVariantByNumber(oldNumber)
+    if (newNumber !== undefined && newNumber !== variant.number) {
+        variant.number = newNumber
+    }
+    if (filePath !== undefined && filePath !== variant.filePath) {
+        variant.filePath = filePath
+    }
+    // if (subTasks !== [] && subTasks !== variant.subTasks) {
+    //     variant.subTasks = subTasks
+    // }
+    for (let i = 0; i < this.variants.length; i++) {
+        if (this.variants[i].id === variant.id) {
+            this.variants[i] = variant
+            return this.save()
+        }
+    }
+}
+
+taskSchema.methods.updateSubTaskById = function (number, subId, name, taskText, filePath, answer) {
+    const variant = this.getVariantByNumber(number)
+    const subTask = this.getSubTaskById(variant.id, subId)
+    if (name !== undefined && name !== subTask.name) {
+        subTask.name = name
+    }
+    if (taskText !== undefined && taskText !== subTask.taskText) {
+        subTask.taskText = taskText
+    }
+    if (filePath !== undefined && filePath !== subTask.filePath) {
+        subTask.filePath = filePath
+    }
+    if (answer !== undefined && answer !== subTask.answer) {
+        subTask.answer = answer
+    }
+    for (var i = 0; i < variant.subTasks.length; i++) {
+        if (variant.subTasks[i].id === subTask.id) {
+            variant.subTasks[i] = subTask
+            return this.save()
+        }
+    }
 }
 
 export default mongoose.model('Task', taskSchema)
