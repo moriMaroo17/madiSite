@@ -18,7 +18,7 @@ import varMiddleware from './middleware/variables.js'
 import { homeRouter } from './routes/home.js'
 import { taskRouter } from './routes/task.js'
 import { authRouter } from './routes/auth.js'
-import { fileRouter } from './routes/file.js'
+import { answerRouter } from './routes/answer.js'
 import { addRouter } from './routes/add.js'
 
 const require = createRequire(import.meta.url);
@@ -66,7 +66,7 @@ app.use(userMiddleware)
 app.use('/', homeRouter)
 app.use('/task', taskRouter)
 app.use('/auth', authRouter)
-// app.use('/file', fileRouter)
+app.use('/answer', answerRouter)
 app.use('/add', addRouter)
 
 function start() {

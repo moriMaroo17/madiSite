@@ -268,6 +268,8 @@ router.get('/:id/:number/:subId', async (req, res) => {
             fileName = subTask.filePath.split('/')[subTask.filePath.split('/').length - 1]
         }
         res.render('subTask', {
+            taskId: task.id,
+            variantNumber: variant.number,
             subTask,
             fileName
         })
