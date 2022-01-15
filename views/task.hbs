@@ -3,7 +3,7 @@
 
 <div>
     {{#if task.filePath}}
-    <p>Прикрепленный файл: <a href="../{{task.filePath}}" download="{{task.name}}">{{fileName}}</a></p>
+    <p>Прикрепленный файл: <a href="/{{task.filePath}}" download="{{task.name}}">{{fileName}}</a></p>
     {{else}}
     <p>Файл для работы не был добавлен</p>
     {{/if}}
@@ -32,3 +32,7 @@
 <hr>
 <p>Вариантов с темами для работы еще не добавлено</p>
 {{/if}}
+
+<a href="/">
+    <button class="btn waves-effect waves-light">Назад</button>
+</a>

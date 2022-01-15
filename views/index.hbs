@@ -22,15 +22,28 @@
                 {{/if}}
             </div>
             <div class="card-action course-task">
+                {{#if @root.isStudent}}
                 <a href="/task/{{id}}/">
                     <button class="btn waves-effect waves-light">Открыть
                         <i class="material-icons right">send</i>
                     </button>
                 </a>
-
+                {{/if}}
+                {{#if @root.isTeacher}}
                 <a href="/task/{{id}}/edit/">
                     <button class="btn waves-effect waves-light">Редактировать</button>
                 </a>
+                {{/if}}
+                {{#if @root.isAdmin}}
+                <a href="/task/{{id}}/">
+                    <button class="btn waves-effect waves-light">Открыть
+                        <i class="material-icons right">send</i>
+                    </button>
+                </a>
+                <a href="/task/{{id}}/edit/">
+                    <button class="btn waves-effect waves-light">Редактировать</button>
+                </a>
+                {{/if}}
             </div>
         </div>
     </div>

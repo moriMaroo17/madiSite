@@ -2,9 +2,17 @@
     <div class="nav-wrapper">
         <a href="/" class="brand-logo">Logo</a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
+        {{#if isAuth}}
             <li><a href="/">Главная</a></li>
+            {{#if isTeacher}}
             <li><a href="/add">Добавить задание</a></li>
-            <li></li>
+            {{/if}}
+            <li><a href="/profile">Профиль</a></li>
+            <li><a href="/auth/logout">Выйти</a></li>
+        {{else}}
+            <li><a href="/auth/login">Войти</a></li>
+            <li><a href="/auth/register">Зарегестрироваться</a></li>
+        {{/if}}
         </ul>
     </div>
 </nav>

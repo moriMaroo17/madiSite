@@ -87,9 +87,7 @@ taskSchema.methods.updateVaraintByNumber = function (oldNumber, newNumber, fileP
     if (filePath !== undefined && filePath !== variant.filePath) {
         variant.filePath = filePath
     }
-    // if (subTasks !== [] && subTasks !== variant.subTasks) {
-    //     variant.subTasks = subTasks
-    // }
+
     for (let i = 0; i < this.variants.length; i++) {
         if (this.variants[i].id === variant.id) {
             this.variants[i] = variant

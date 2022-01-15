@@ -1,16 +1,17 @@
 import fs from 'fs'
 import { Router } from 'express'
 import Task from '../models/task.js'
+import { teacherPermission } from '../middleware/permission.js'
 
 const router = new Router()
 
-router.get('/', (req, res) => {
+router.get('/', teacherPermission, (req, res) => {
     res.render('add', {
         title: 'Добавить работу'
     })
 })
 
-router.post('/', async (req, res) => {
+router.post('/', teacherPermission, async (req, res) => {
     try {
         if (!fs.existsSync(`./docs/${req.body.name}/`)){
             fs.mkdirSync(`./docs/${req.body.name}/`);
