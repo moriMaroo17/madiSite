@@ -1,0 +1,27 @@
+<div>
+    <h5>Работа: {{info.task}}</h5>
+    <h5>Вариант: {{info.variant}}</h5>
+    <h5>Тема: {{info.subTask}}</h5>
+</div>
+<hr>
+<div>
+    <h5>Текст задания:</h5>
+    <p>{{info.subTaskText}}</p>
+</div>
+<hr>
+<table class="highlight">
+    <thead>
+        <tr>
+            <th>Имя</th>
+            <th>Ответ</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each answers}}
+        <tr>
+            <td>{{userId.name}}</td>
+            <td>{{answer}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>

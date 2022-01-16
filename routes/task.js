@@ -1,14 +1,13 @@
 import fs from 'fs'
 import { Router } from 'express'
 import Task from '../models/task.js'
-import { teacherPermission } from '../middleware/permission.js'
+import { teacherPermission, studentPermission } from '../middleware/permission.js'
 
 const router = new Router()
 
 router.post('/remove', teacherPermission, async (req, res) => {
     try {
         const task = await Task.findById(req.body.id)
-        console.log(task)
         fs.rmSync(`./docs/${task.name}`, { recursive: true, force: true })
         await Task.deleteOne({ _id: req.body.id })
         res.redirect('/')
@@ -20,7 +19,6 @@ router.post('/remove', teacherPermission, async (req, res) => {
 router.post('/removeSubTask', teacherPermission, async (req, res) => {
     try {
         const task = await Task.findById(req.body.id)
-        console.log(task)
         fs.rmSync(`./docs/${task.name}/${req.body.subTaskName}`, { recursive: true, force: true })
         await task.deleteSubTaskById(req.body.variantId, req.body.subTaskId)
         res.redirect(`/task/${req.body.id}/edit`)
@@ -32,7 +30,6 @@ router.post('/removeSubTask', teacherPermission, async (req, res) => {
 router.get('/:id/edit', teacherPermission, async (req, res) => {
     try {
         const task = await Task.findById(req.params.id)
-        console.log(task)
         let fileName = ''
         if (task.filePath) {
             fileName = task.filePath.split('/')[task.filePath.split('/').length - 1]
@@ -51,13 +48,11 @@ router.get('/:id/edit', teacherPermission, async (req, res) => {
 router.get('/:id/:number/edit', teacherPermission, async (req, res) => {
     try {
         const task = await Task.findById(req.params.id)
-        console.log(task)
         const variant = await task.getVariantByNumber(req.params.number)
         let fileName = ''
         if (variant.filePath) {
             fileName = variant.filePath.split('/')[variant.filePath.split('/').length - 1]
         }
-        console.log(variant)
         res.render('editVariant', {
             title: 'Редактировать вариант',
             id: req.params.id,
@@ -105,7 +100,6 @@ router.post('/:id/:number/editVariant', teacherPermission, async (req, res) => {
 })
 
 router.post('/:id/addVariant', teacherPermission, async (req, res) => {
-    console.log('primary adder for variant works')
     try {
         const task = await Task.findById(req.params.id)
         if (!fs.existsSync(`./docs/${task.name}/${req.body.number}/`)) {
@@ -126,7 +120,6 @@ router.post('/:id/addVariant', teacherPermission, async (req, res) => {
 router.post('/:id/:number/addSubTask', teacherPermission, async (req, res) => {
     try {
         const task = await Task.findById(req.params.id)
-        console.log(req.body)
         if (!fs.existsSync(`./docs/${task.name}/${req.params.number}/${req.body.name}/`)) {
             fs.mkdirSync(`./docs/${task.name}/${req.params.number}/${req.body.name}/`);
         }
@@ -206,7 +199,6 @@ router.post('/:id/:number/:subId/edit', teacherPermission, async (req, res) => {
 router.post('/removeVariant', teacherPermission, async (req, res) => {
     try {
         const task = await Task.findById(req.body.taskId)
-        console.log(task)
         await task.deleteVariantById(req.body.variantId)
         fs.rmSync(`./docs/${task.name}/${req.body.number}`, { recursive: true, force: true })
         res.redirect(`/task/${req.body.taskId}/edit`)
@@ -219,7 +211,6 @@ router.post('/edit', teacherPermission, async (req, res) => {
     try {
         console.log(req.body, req.files)
         const task = await Task.findById(req.body.id)
-        console.log(task)
         if (!fs.existsSync(`./docs/${task.name}/`)) {
             fs.mkdirSync(`./docs/${task.name}/`);
         }
@@ -244,7 +235,7 @@ router.post('/edit', teacherPermission, async (req, res) => {
     }
 })
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', studentPermission, async (req, res) => {
     try {
         const task = await Task.findById(req.params.id)
         const fileNameArr = task.filePath.split('/')
@@ -258,7 +249,7 @@ router.get('/:id', async (req, res) => {
     }
 })
 
-router.get('/:id/:number/:subId', async (req, res) => {
+router.get('/:id/:number/:subId', studentPermission, async (req, res) => {
     try {
         const task = await Task.findById(req.params.id)
         const variant = await task.getVariantByNumber(req.params.number)
@@ -278,7 +269,7 @@ router.get('/:id/:number/:subId', async (req, res) => {
     }
 })
 
-router.get('/:id/:number', async (req, res) => {
+router.get('/:id/:number', studentPermission, async (req, res) => {
     try {
         const task = await Task.findById(req.params.id)
         const variant = await task.getVariantByNumber(req.params.number)
