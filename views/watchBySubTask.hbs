@@ -1,7 +1,22 @@
-<div>
-    <h5>Работа: {{info.task}}</h5>
-    <h5>Вариант: {{info.variant}}</h5>
-    <h5>Тема: {{info.subTask}}</h5>
+<div class="row">
+    {{!-- <p>Работа:</p> --}}
+    <div class="col s4">
+        <label for="task">Работа</label>
+        <h5 id="task">{{info.task}}</h5>
+    </div>
+    <div class="col s4">
+        <label for="variant">Вариант</label>
+        <h5 id="variant">{{info.variant}}</h5>
+    </div>
+    <div class="col s4">
+        <label for="theme">Тема</label>
+        <h5 id="theme">{{info.subTask}}</h5>
+    </div>
+
+    {{!-- <label for="variant">Вариант</label>
+    <h5 id="variant">{{info.variant}}</h5>
+    <label for="theme">Тема</label>
+    <h5 id="theme">{{info.subTask}}</h5> --}}
 </div>
 <hr>
 <div>
@@ -9,19 +24,25 @@
     <p>{{info.subTaskText}}</p>
 </div>
 <hr>
-<table class="highlight">
+<table class="highlight result-table">
     <thead>
         <tr>
             <th>Имя</th>
             <th>Ответ</th>
+            <th>Правильный ответ</th>
         </tr>
     </thead>
     <tbody>
         {{#each answers}}
         <tr>
-            <td>{{userId.name}}</td>
+            <td><a href="../watchByStudent/{{userId._id}}">{{userId.name}}</a></td>
             <td>{{answer}}</td>
+            <td>{{subTaskId.answer}}</td>
         </tr>
         {{/each}}
     </tbody>
 </table>
+
+<a href="../">
+    <button class="btn waves-effect waves-light">Назад</button>
+</a>

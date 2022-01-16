@@ -1,0 +1,24 @@
+<div>
+    <h5>Список студентов</h5>
+</div>
+<hr>
+
+<table class="highlight result-table">
+    <thead>
+        <tr>
+            <th>Имя</th>
+            <th>Почта</th>
+            <th>Профиль</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each students}}
+        <tr>
+            <td>{{name}}</td>
+            <td>{{email}}</td>
+            <td><a href="/journal/watchByStudent/{{id}}"><button
+                        class="btn waves-effect waves-light">Открыть</button></a></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>

@@ -1,0 +1,32 @@
+<div>
+    <h5>Имя: {{student.name}}</h5>
+    <h5>Email: {{student.email}}</h5>
+</div>
+<hr>
+
+<table class="highlight result-table">
+    <thead>
+        <tr>
+            <th>Работа</th>
+            <th>Вариант</th>
+            <th>Тема</th>
+            <th>Ответ</th>
+            <th>Правильный ответ</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each answers}}
+        <tr>
+            <td>{{taskId.name}}</td>
+            <td>{{variant}}</td>
+            <td>{{subTaskId.name}}</td>
+            <td>{{answer}}</td>
+            <td>{{subTaskId.answer}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+<a href="../">
+    <button class="btn waves-effect waves-light">Назад</button>
+</a>
