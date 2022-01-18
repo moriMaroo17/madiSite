@@ -31,7 +31,6 @@ router.get('/logout', (req, res) => {
 router.post('/login', loginValidators, async (req, res) => {
     try {
         const errors = validationResult(req)
-        console.log(errors)
         if (!errors.isEmpty()) {
             req.flash('loginError', errors.array()[0].msg)
             return res.status(422).redirect('/auth/login')

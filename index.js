@@ -21,6 +21,7 @@ import { authRouter } from './routes/auth.js'
 import { answerRouter } from './routes/answer.js'
 import { addRouter } from './routes/add.js'
 import { journalRouter } from './routes/journal.js'
+import { profileRouter } from './routes/profile.js'
 
 const require = createRequire(import.meta.url);
 
@@ -70,6 +71,7 @@ app.use('/auth', authRouter)
 app.use('/answer', answerRouter)
 app.use('/add', addRouter)
 app.use('/journal', journalRouter)
+app.use('/profile', profileRouter)
 
 function start() {
     try {

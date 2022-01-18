@@ -5,6 +5,9 @@
                 <p class="alert">{{loginError}}</p>
             {{/if}}
             <h1>Войти в аккаунт</h1>
+
+            <p><a href="./register">Нет аккаунта? Зарегестрируйтесь</a></p>
+
             <form action="/auth/login" method="post">
                 <div class="input-field">
                     <input id="email" name="email" type="email" class="validate" required>

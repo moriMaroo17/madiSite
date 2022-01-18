@@ -7,8 +7,6 @@ const router = new Router()
 
 router.post('/', async (req, res) => {
     try {
-        console.log(req.user)
-        console.log(req.session)
         const answer = new Answer({
             userId: req.session.user._id,
             taskId: req.body.taskId,
