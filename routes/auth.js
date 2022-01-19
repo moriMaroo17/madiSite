@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { validationResult } from 'express-validator'
 import bcrypt from 'bcryptjs'
 import User from '../models/user.js'
-import { registerValidators, loginValidators } from '../utils/validators.js'
+import { registerValidators, loginValidators, resetValidators } from '../utils/validators.js'
 
 
 const router = new Router()
@@ -42,7 +42,11 @@ router.post('/login', loginValidators, async (req, res) => {
             if (err) {
                 throw err
             }
-            res.redirect('/')
+            if (req.session.user.role === 'admin') {
+                res.redirect('/admin')
+            } else {
+                res.redirect('/')
+            }
         })
     } catch (error) {
         console.log(error)
@@ -61,17 +65,52 @@ router.post('/register', registerValidators, async (req, res) => {
 
         const hashPassword = await bcrypt.hash(password, 10)
 
-        const user = new User({
-            email,
-            name,
-            password: hashPassword,
-        })
-        await user.save()
-        res.redirect('/auth/login')
+        if (req.session.user.role === 'admin') {
+            const user = new User({
+                email,
+                name,
+                password: hashPassword,
+                role: req.body.role
+            })
+            await user.save()
+            res.redirect('/admin')
+        } else {
+            const user = new User({
+                email,
+                name,
+                password: hashPassword,
+            })
+            await user.save()
+            res.redirect('/auth/login')
+        }
     } catch (error) {
         console.log(error)
     }    
 })
 
+router.get('/reset', async (req, res) => {
+    res.render('reset', {
+        title: 'Сброс пароля',
+        resetError: req.flash('resetError')
+    })
+})
+
+router.post('/reset', resetValidators, async (req, res) => {
+    try {
+        const errors = validationResult(req)
+        // console.log(errors.array()[0].msg)
+        if (!errors.isEmpty()) {
+            req.flash('resetError', errors.array()[0].msg)
+            return res.status(422).redirect('/auth/reset')
+        }
+        const user = await User.findOne({email: req.body.email, name: req.body.name})
+        user.reset = true
+        console.log(user)
+        await user.save()
+        res.redirect('/auth/login')
+    } catch (error) {
+        console.log(error)
+    }
+})
 
 export { router as authRouter }

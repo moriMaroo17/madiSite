@@ -33,5 +33,14 @@ router.post('/', async (req, res) => {
     }
 })
 
+router.get('/changePassword', (req, res) => {
+    res.render('changePassword', {
+        title: 'Смена пароля'
+    })
+})
+
+router.post('/changePassword', async (req, res) => {
+    // write feature for change password
+})
 
 export { router as profileRouter }

@@ -2,7 +2,7 @@
     <div class="row">
         <div id="register" class="col s6 offset-s3">
             {{#if registerError}}
-                <p class="alert">{{registerError}}</p>
+            <p class="alert">{{registerError}}</p>
             {{/if}}
             <h1>Создать аккаунт</h1>
             <form action="/auth/register" method="post" novalidate>
@@ -29,6 +29,28 @@
                     <label for="name">Ваше имя</label>
                     <span class="helper-text" data-error="Введите имя"></span>
                 </div>
+
+                {{#if isAdmin}}
+                <h6>Роль пользователя</h6>
+                <p>
+                    <label>
+                        <input name="role" type="radio" value="student" checked />
+                        <span>Студент</span>
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        <input name="role" type="radio" value="teacher" />
+                        <span>Преподаватель</span>
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        <input name="role" type="radio" value="admin" />
+                        <span>Администратор</span>
+                    </label>
+                </p>
+                {{/if}}
 
                 <input type="hidden" name="_csrf" value="{{csrf}}">
 

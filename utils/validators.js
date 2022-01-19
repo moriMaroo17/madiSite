@@ -63,4 +63,19 @@ const loginValidators = [
         })
 ]
 
-export { registerValidators, loginValidators }
+const resetValidators = [
+    body('email')
+        .custom(async (value, { req }) => {
+            try {
+                const user = await User.findOne({ email: value, name: req.body.name })
+                if (!user) {
+                    return Promise.reject('Такого пользователя не существует')
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        })
+        .normalizeEmail(),
+]
+
+export { registerValidators, loginValidators, resetValidators }

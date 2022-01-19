@@ -17,6 +17,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         default: 'student'
+    },
+    reset: {
+        type: Boolean,
+        default: false
     }
 })
 

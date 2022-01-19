@@ -14,11 +14,17 @@
                 <span class="helper-text" data-error="Имя не может быть пустым"></span>
             </div>
 
+            <div class="reset-div">
+                <a href="/profile/changePassword">Смена пароля</a>
+            </div>
+
             <input type="hidden" name="_csrf" value="{{csrf}}">
 
             <button type="submit" class="btn">Изменить</button>
         </form>
+
     </div>
+
     {{#if isStudent}}
     <div class="col s6">
         <h4>Ваши ответы</h4>
@@ -36,7 +42,8 @@
                     </div>
                     <div class="col s3">
                         <label for="theme">Тема</label>
-                        <h5 id="theme"><a href="/task/{{taskId.id}}/{{variant}}/{{subTaskId.id}}">{{subTaskId.name}}</a></h5>
+                        <h5 id="theme"><a href="/task/{{taskId.id}}/{{variant}}/{{subTaskId.id}}">{{subTaskId.name}}</a>
+                        </h5>
                     </div>
                     <div class="col s3">
                         <label for="answer">Ваш ответ</label>
