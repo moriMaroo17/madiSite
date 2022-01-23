@@ -9,20 +9,6 @@
     {{/if}}
 </div>
 
-<<<<<<< HEAD
-{{#if task.content.subTasks}}
-<p>Список тем</p>
-<hr>
-<ul class="collection">
-    {{#each task.content.subTasks}}
-    <li class="collection-item"><a href="/task/{{@root.task.id}}/subTask/{{id}}">{{name}}</a></li>
-    {{/each}}
-</ul>
-{{else}}
-<hr>
-<p>Тем для работы еще не добавлено</p>
-{{/if}}
-=======
 {{#if task.variants}}
 <p>Список вариантов</p>
 <hr>
@@ -50,4 +36,3 @@
 <a href="/">
     <button class="btn waves-effect waves-light">Назад</button>
 </a>
->>>>>>> role-model

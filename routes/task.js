@@ -34,7 +34,6 @@ router.get('/:id/edit', teacherPermission, async (req, res) => {
         let fileName = ''
         if (task.filePath) {
             fileName = task.filePath.split('/')[task.filePath.split('/').length - 1]
-            console.log(fileName)
         }
         res.render('edit', {
             title: 'Редактировать работу',
