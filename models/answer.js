@@ -32,8 +32,6 @@ answerSchema.methods.populateSubTask = async function() {
     const task = await Task.findById(this.taskId)
     const variant = await task.getVariantByNumber(this.variant)
     const subTask = await task.getSubTaskById(variant.id, this.subTaskId)
-    // console.log(subTask)
-    // this.subTaskId = subTask
     return {
         _id: this._id,
         userId: this.userId,

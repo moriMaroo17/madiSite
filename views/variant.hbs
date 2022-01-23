@@ -1,9 +1,9 @@
-<h1>Вариант {{varinat.name}}</h1>
+<h1>Вариант {{variant.number}}</h1>
 <h2>Успехов с выполнением задания</h2>
 
 <div>
-    {{#if varinat.filePath}}
-    <p>Прикрепленный файл: <a href="/{{variant.filePath}}" download="{{variant.name}}">{{fileName}}</a></p>
+    {{#if variant.filePath}}
+    <p>Прикрепленный файл: <a href="/{{variant.filePath}}" download="{{variant.number}}">{{fileName}}</a></p>
     {{else}}
     <p>Файл для работы не был добавлен</p>
     {{/if}}
@@ -12,7 +12,7 @@
 {{#if variant.subTasks}}
 <ul class="collection">
     {{#each variant.subTasks}}
-    <li class="collection-item"><a href="./{{id}}">{{name}}</a></li>
+    <li class="collection-item"><a href="/task/{{@root.taskId}}/{{@root.variant.number}}/{{id}}">{{name}}</a></li>
     {{/each}}
 </ul>
 {{else}}

@@ -1,6 +1,7 @@
 import fs from 'fs'
 import { Router } from 'express'
 import Task from '../models/task.js'
+import Answer from '../models/answer.js'
 import { teacherPermission, studentPermission } from '../middleware/permission.js'
 
 const router = new Router()
@@ -220,7 +221,6 @@ router.post('/removeVariant', teacherPermission, async (req, res) => {
 router.post('/edit', teacherPermission, async (req, res) => {
     try {
         const task = await Task.findById(req.body.id)
-        console.log(req.body)
         if (!fs.existsSync(`./docs/${task.name}/`)) {
             fs.mkdirSync(`./docs/${task.name}/`);
         }
@@ -268,6 +268,7 @@ router.get('/:id/:number/:subId', studentPermission, async (req, res) => {
         const task = await Task.findById(req.params.id)
         const variant = await task.getVariantByNumber(req.params.number)
         const subTask = await task.getSubTaskById(variant.id, req.params.subId)
+        const answer = await Answer.findOne({userId: req.session.user._id, taskId: req.params.id, variant: req.params.number, subTaskId: req.params.subId})
         let fileName = ''
         if (subTask.filePath) {
             fileName = subTask.filePath.split('/')[subTask.filePath.split('/').length - 1]
@@ -276,7 +277,8 @@ router.get('/:id/:number/:subId', studentPermission, async (req, res) => {
             taskId: task.id,
             variantNumber: variant.number,
             subTask,
-            fileName
+            fileName,
+            answer
         })
     } catch (error) {
         console.log(error)
@@ -291,8 +293,8 @@ router.get('/:id/:number', studentPermission, async (req, res) => {
         res.render('variant', {
             title: `Вариант ${req.params.number}`,
             taskId: task.id,
-            variant: variant,
-            fileNameArr: fileNameArr[fileNameArr.length - 1]
+            variant,
+            fileName: fileNameArr[fileNameArr.length - 1]
         })
     } catch (error) {
         console.log(error)
