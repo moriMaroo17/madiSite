@@ -78,4 +78,49 @@ const resetValidators = [
         .normalizeEmail(),
 ]
 
-export { registerValidators, loginValidators, resetValidators }
+const changeValidators = [
+    body('password')
+        .trim()
+        .custom(async (value, { req }) => {
+            try {
+                const user = await User.findOne({ email: req.user.email })
+                if (user) {
+                    const areSame = await bcrypt.compare(value, user.password)
+                    if (!areSame) {
+                        return Promise.reject('Неверный пароль')
+                    }
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        }),
+    body('newPassword', 'Введите пароль длинной 6-56 символов из латинских букв и цифр')
+        .isLength({ min: 6, max: 56 })
+        .isAlphanumeric()
+        .trim(),
+    body('confirm')
+        .custom((value, { req }) => {
+            if (value !== req.body.newPassword) {
+                throw new Error('Пароли должны совпадать')
+            }
+            return true
+        })
+        .trim(),
+]
+
+const dropValidators = [
+    body('password', 'Введите пароль длинной 6-56 символов из латинских букв и цифр')
+        .isLength({ min: 6, max: 56 })
+        .isAlphanumeric()
+        .trim(),
+    body('confirm')
+        .custom((value, { req }) => {
+            if (value !== req.body.password) {
+                throw new Error('Пароли должны совпадать')
+            }
+            return true
+        })
+        .trim(),
+]
+
+export { registerValidators, loginValidators, resetValidators, changeValidators, dropValidators }

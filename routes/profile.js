@@ -1,6 +1,9 @@
 import { Router } from 'express'
 import User from '../models/user.js'
+import { validationResult } from 'express-validator'
+import bcrypt from 'bcryptjs'
 import Answer from '../models/answer.js'
+import { changeValidators } from '../utils/validators.js'
 
 const router = new Router()
 
@@ -35,12 +38,33 @@ router.post('/', async (req, res) => {
 
 router.get('/changePassword', (req, res) => {
     res.render('changePassword', {
-        title: 'Смена пароля'
+        title: 'Смена пароля',
+        changeError: req.flash('changeError')
     })
 })
 
-router.post('/changePassword', async (req, res) => {
-    // write feature for change password
+router.post('/changePassword', changeValidators, async (req, res) => {
+    try {
+        const errors = validationResult(req)
+        if (!errors.isEmpty()) {
+            req.flash('changeError', errors.array()[0].msg)
+            return res.status(422).redirect('/profile/changePassword')
+        }
+
+        const { newPassword } = req.body
+
+        const user = await User.findOne(req.session.user._id)
+        console.log(req.session)
+        console.log(user)
+
+        const hashPassword = await bcrypt.hash(newPassword, 10)
+
+        user.password = hashPassword
+        await user.save()
+        res.redirect('/profile')
+    } catch (error) {
+        console.log(error)
+    }
 })
 
 export { router as profileRouter }
