@@ -42,6 +42,7 @@ const onlyAuthPermission = async function(req, res, next) {
         res.redirect('/auth/login')
         return
     }
+    next()
 }
 
 export { studentPermission, teacherPermission, adminPermission, onlyAuthPermission }

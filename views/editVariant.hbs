@@ -6,7 +6,13 @@
             <label for="number">Номер варианта</label>
         </div>
         {{#if variant.filePath}}
-        <p>Прикрепленный файл: <a href="../{{variant.filePath}}" download="{{fileName}}">{{fileName}}</a></p>
+        <p>Прикрепленный файл: <a href="/{{variant.filePath}}" download="{{fileName}}">{{fileName}}</a></p>
+        <p>
+            <label>
+                <input id="removeFile" name="removeFile" type="checkbox" />
+                <span>Удалить файл</span>
+            </label>
+        </p>
         {{else}}
         <p>Файл для работы не был добавлен</p>
         {{/if}}

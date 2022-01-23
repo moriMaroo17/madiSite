@@ -1,33 +1,41 @@
 <div class="form-group">
     {{#if forEdit}}
     <form action="./edit" method="post" enctype="multipart/form-data">
-    {{else}}
-    <form action="./addSubTask" method="post" enctype="multipart/form-data">
-    {{/if}}
-        <div class="input-field col s3">
-            <input class="form-input" id="name" name="name" type="text" value="{{subTask.name}}" required>
-            <label for="name">Название темы</label>
-        </div>
-        <div class="input-field col s12">
-          <textarea id="textarea1" class="materialize-textarea" id="taskText" name="taskText">{{subTask.taskText}}</textarea>
-          <label for="textarea1">Задание</label>
-        </div>
-
-        {{#if subTask.filePath}}
-        <p>Прикрепленный файл: <a href="../../../../{{subTask.filePath}}" download="{{fileName}}">{{fileName}}</a></p>
         {{else}}
-        <p>Файл для работы не был добавлен</p>
-        {{/if}}
+        <form action="./addSubTask" method="post" enctype="multipart/form-data">
+            {{/if}}
+            <div class="input-field col s3">
+                <input class="form-input" id="name" name="name" type="text" value="{{subTask.name}}" required>
+                <label for="name">Название темы</label>
+            </div>
+            <div class="input-field col s12">
+                <textarea id="textarea1" class="materialize-textarea" id="taskText"
+                    name="taskText">{{subTask.taskText}}</textarea>
+                <label for="textarea1">Задание</label>
+            </div>
 
-        <div class="col s3">
-            <input class="form-input" id="filePath" name="filePath" type="file">
-        </div>
+            {{#if subTask.filePath}}
+            <p>Прикрепленный файл: <a href="/{{subTask.filePath}}" download="{{fileName}}">{{fileName}}</a>
+            </p>
+            <p>
+                <label>
+                    <input id="removeFile" name="removeFile" type="checkbox" />
+                    <span>Удалить файл</span>
+                </label>
+            </p>
+            {{else}}
+            <p>Файл для работы не был добавлен</p>
+            {{/if}}
 
-        <div class="input-field col s3">
-            <input class="form-input" id="answer" name="answer" type="text" value="{{subTask.answer}}" >
-            <label for="answer">Ответ</label>
-        </div>
+            <div class="col s3">
+                <input class="form-input" id="filePath" name="filePath" type="file">
+            </div>
 
-        <button class="btn btn-success publish-task-btn col s3">Опубликовать тему</button>
-    </form>
+            <div class="input-field col s3">
+                <input class="form-input" id="answer" name="answer" type="text" value="{{subTask.answer}}">
+                <label for="answer">Ответ</label>
+            </div>
+
+            <button class="btn btn-success publish-task-btn col s3">Опубликовать тему</button>
+        </form>
 </div>
