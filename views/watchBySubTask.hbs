@@ -1,0 +1,42 @@
+<div class="row">
+    <div class="col s4">
+        <label for="task">Работа</label>
+        <h5 id="task">{{info.task}}</h5>
+    </div>
+    <div class="col s4">
+        <label for="variant">Вариант</label>
+        <h5 id="variant">{{info.variant}}</h5>
+    </div>
+    <div class="col s4">
+        <label for="theme">Тема</label>
+        <h5 id="theme">{{info.subTask}}</h5>
+    </div>
+</div>
+<hr>
+<div>
+    <h5>Текст задания:</h5>
+    <p>{{info.subTaskText}}</p>
+</div>
+<hr>
+<table class="highlight result-table">
+    <thead>
+        <tr>
+            <th>Имя</th>
+            <th>Ответ</th>
+            <th>Правильный ответ</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each answers}}
+        <tr>
+            <td><a href="../watchByStudent/{{userId._id}}">{{userId.name}}</a></td>
+            <td>{{answer}}</td>
+            <td>{{subTaskId.answer}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+<a href="../">
+    <button class="btn waves-effect waves-light">Назад</button>
+</a>

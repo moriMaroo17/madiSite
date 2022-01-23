@@ -1,0 +1,24 @@
+<h1>Вариант {{variant.number}}</h1>
+<h2>Успехов с выполнением задания</h2>
+
+<div>
+    {{#if variant.filePath}}
+    <p>Прикрепленный файл: <a href="/{{variant.filePath}}" download="{{variant.number}}">{{fileName}}</a></p>
+    {{else}}
+    <p>Файл для работы не был добавлен</p>
+    {{/if}}
+</div>
+
+{{#if variant.subTasks}}
+<ul class="collection">
+    {{#each variant.subTasks}}
+    <li class="collection-item"><a href="/task/{{@root.taskId}}/{{@root.variant.number}}/{{id}}">{{name}}</a></li>
+    {{/each}}
+</ul>
+{{else}}
+<h4>Тем для варианта еще не добавлено</h4>
+{{/if}}
+
+<a href="./">
+    <button class="btn waves-effect waves-light">Назад</button>
+</a>

@@ -1,16 +1,15 @@
 <h1>{{taks.name}}</h1>
 <h2>Успехов с выполнением задания</h2>
-{{#if task.filePath}}
+
 <div>
-    <p>Для более удобного просмотра вы можете <a href="../{{task.filePath}}" download="{{task.name}}">скачать</a>
-        файл</p>
-
+    {{#if task.filePath}}
+    <p>Прикрепленный файл: <a href="/{{task.filePath}}" download="{{task.name}}">{{fileName}}</a></p>
+    {{else}}
+    <p>Файл для работы не был добавлен</p>
+    {{/if}}
 </div>
-<embed src="../{{task.filePath}}" type="application/pdf" width="90%" height="800px" />
-{{else}}
-<p>Файл для работы не был добавлен</p>
-{{/if}}
 
+<<<<<<< HEAD
 {{#if task.content.subTasks}}
 <p>Список тем</p>
 <hr>
@@ -23,3 +22,32 @@
 <hr>
 <p>Тем для работы еще не добавлено</p>
 {{/if}}
+=======
+{{#if task.variants}}
+<p>Список вариантов</p>
+<hr>
+{{#each task.variants}}
+<div class="card variant-card col s12">
+    <h4><a href="/task/{{@root/task.id}}/{{number}}/">Вариант {{number}}</a></h4>
+    {{#if subTasks}}
+    <p>Список тем</p>
+    <hr>
+    <ul class="collection">
+        {{#each subTasks}}
+        <li class="collection-item">{{name}}</li>
+        {{/each}}
+    </ul>
+    {{else}}
+    <p>Тем для варианта еще не добавлено</p>
+    {{/if}}
+</div>
+{{/each}}
+{{else}}
+<hr>
+<p>Вариантов с темами для работы еще не добавлено</p>
+{{/if}}
+
+<a href="/">
+    <button class="btn waves-effect waves-light">Назад</button>
+</a>
+>>>>>>> role-model

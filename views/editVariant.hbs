@@ -1,0 +1,69 @@
+<div class="form-group">
+    <form action="/task/{{id}}/{{variant.number}}/editVariant" method="post" enctype="multipart/form-data"
+        name="addVariantForm">
+        <div class="input-field col s6">
+            <input class="form-input" id="number" name="number" type="number" value="{{variant.number}}" required>
+            <label for="number">Номер варианта</label>
+        </div>
+        {{#if variant.filePath}}
+        <p>Прикрепленный файл: <a href="/{{variant.filePath}}" download="{{fileName}}">{{fileName}}</a></p>
+        <p>
+            <label>
+                <input id="removeFile" name="removeFile" type="checkbox" />
+                <span>Удалить файл</span>
+            </label>
+        </p>
+        {{else}}
+        <p>Файл для работы не был добавлен</p>
+        {{/if}}
+        <div class="input-field col s6">
+            <input class="form-input" id="filePath" name="filePath" type="file">
+        </div>
+
+        <button type="submit" class="btn btn-success publish-task-btn col s3">Опубликовать
+            вариант</button>
+    </form>
+    {{#if variant.subTasks}}
+    <div id="subTasksEditTable">
+        <table class="table answers-table" id="answers">
+            <thead>
+                <tr>
+                    <th>Название темы</th>
+                    <th>Ответ</th>
+                    <th>Редактировать</th>
+                    <th>Удалить</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {{#each variant.subTasks}}
+                <tr class="active">
+                    <td>{{name}}</td>
+                    <td>{{answer}}</td>
+                    <td><a href="/task/{{@root.id}}/{{@root.variant.number}}/{{_id}}/edit"><button
+                                class="btn waves-effect waves-light">Редактировать</button></a></td>
+                    <td>
+                        <form method="post" id="removeSubTaskForm{{@index}}" action="/task/removeSubTask">
+                            <input type="hidden" name="id" value="{{@root.id}}">
+                            <input type="hidden" name="subTaskId" value="{{_id}}">
+                            <input type="hidden" name="variantId" value="{{@root.variant.id}}">
+                            <button class="btn btn-primary btn-action btn-lg" form="removeSubTaskForm{{@index}}">
+                                <i class="material-icons dp48">delete_forever</i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+    {{else}}
+    <h4>Тем для варианта еще не добавлено</h4>
+    {{/if}}
+
+    <form action="/task/{{id}}/{{variant.number}}/addSubTask" method="get" class="edit-form">
+        <div class="row">
+            <button class="btn btn-success publish-task-btn col s3">Добавить тему</button>
+        </div>
+    </form>
+</div>

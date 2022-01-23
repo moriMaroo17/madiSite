@@ -1,0 +1,32 @@
+<div class="auth">
+    <div class="row">
+        <div id="login" class="col s6 offset-s3">
+            {{#if loginError}}
+                <p class="alert">{{loginError}}</p>
+            {{/if}}
+            <h1>Войти в аккаунт</h1>
+
+            <p><a href="./register">Нет аккаунта? Зарегестрируйтесь</a></p>
+
+            <form action="/auth/login" method="post">
+                <div class="input-field">
+                    <input id="email" name="email" type="email" class="validate" required>
+                    <label for="email">Email</label>
+                    <span class="helper-text" data-error="Введите email"></span>
+                </div>
+
+                <div class="input-field">
+                    <input id="password" name="password" type="password" class="validate" required>
+                    <label for="password">Пароль</label>
+                    <span class="helper-text" data-error="Пароль"></span>
+                </div>
+
+                <p><a href="./reset">Забыли пароль?</a></p>
+
+                <input type="hidden" name="_csrf" value="{{csrf}}">
+
+                <button class="btn btn-primary" type="submit">Войти</button>
+            </form>
+        </div>
+    </div>
+</div>

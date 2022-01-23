@@ -1,0 +1,28 @@
+<div class="auth">
+    <div class="row">
+        <div id="drop" class="col s6 offset-s3">
+            {{#if dropError}}
+            <p class="alert">{{dropError}}</p>
+            {{/if}}
+            <h1>Сбросить пароль</h1>
+            <form action="/admin/drop/{{userId}}" method="post" novalidate>
+
+                <div class="input-field">
+                    <input id="password" name="password" type="password" class="validate" required>
+                    <label for="password">Пароль</label>
+                    <span class="helper-text" data-error="Пароль"></span>
+                </div>
+
+                <div class="input-field">
+                    <input id="confirm" name="confirm" type="password" class="validate" required>
+                    <label for="confirm">Пароль еще раз</label>
+                    <span class="helper-text" data-error="Пароль"></span>
+                </div>
+
+                <input type="hidden" name="_csrf" value="{{csrf}}">
+
+                <button class="btn btn-primary" type="submit">Сбросить пароль</button>
+            </form>
+        </div>
+    </div>
+</div>

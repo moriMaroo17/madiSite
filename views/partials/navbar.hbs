@@ -1,10 +1,27 @@
 <nav>
     <div class="nav-wrapper">
+        {{#if isAdmin}}
+        <a href="/admin" class="brand-logo">Logo</a>
+        {{else}}
         <a href="/" class="brand-logo">Logo</a>
+        {{/if}}
         <ul id="nav-mobile" class="right hide-on-med-and-down">
+        {{#if isAuth}}
+            {{#if isAdmin}}
+            <li><a href="/admin"></a></li>
+            {{else}}
             <li><a href="/">Главная</a></li>
+            {{/if}}
+            {{#if isTeacher}}
             <li><a href="/add">Добавить задание</a></li>
-            <li></li>
+            <li><a href="/journal">Журнал</a></li>
+            <li><a href="/journal/students">Список студентов</a></li>
+            {{/if}}
+            <li><a href="/profile">Профиль</a></li>
+            <li><a href="/auth/logout">Выйти</a></li>
+        {{else}}
+            <li><a href="/auth/login">Войти</a></li>
+        {{/if}}
         </ul>
     </div>
 </nav>

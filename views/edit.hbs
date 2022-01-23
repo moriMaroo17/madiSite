@@ -1,21 +1,28 @@
 <div class="form-group">
     <form action="/task/edit" method="post" class="edit-form" enctype="multipart/form-data" id="editTaskForm">
-        <div class="col-3">
-            <label class="form-label">Название работы</label>
+        <div class="input-field col s6">
+            <input id="name" name="name" type="text" required value="{{task.name}}">
+            <label for="name">Название работы</label>
         </div>
-        <div class="col-6">
-            <input class="form-input" id="name" name="name" type="text" required value="{{data.name}}">
-        </div>
-        <div class="col-3">
-            <label class="form-label">Файл</label>
-        </div>
-        <div class="col-6">
-            <input class="form-input" id="filePath" name="filePath" type="file" value="{{data.filePath}}">
+        {{#if task.filePath}}
+        <p>Прикрепленный файл: <a href="/{{task.filePath}}" download="{{fileName}}">{{fileName}}</a></p>
+        <p>
+            <label>
+                <input id="removeFile" name="removeFile" type="checkbox" />
+                <span>Удалить файл</span>
+            </label>
+        </p>
+        {{else}}
+        <p>Файл для работы не был добавлен</p>
+        {{/if}}
+        <div class="input-field col s6">
+            <input id="filePath" name="filePath" type="file">
         </div>
 
-        <input type="hidden" name="id" value="{{data.id}}">
+        <input type="hidden" name="id" value="{{task.id}}">
     </form>
     <div class="col-6">
+<<<<<<< HEAD
         {{#if data.content.subTasks}}
         <div id="subTasksEditTable">
             <table class="table answers-table" id="answers">
@@ -63,5 +70,86 @@
     <form action="../../task/remove" method="post" class="edit-form">
         <input type="hidden" name="id" value="{{data.id}}">
         <button class="btn btn-success publish-task-btn">Удалить работу</button>
+=======
+        {{#each task.variants}}
+        <div class="card variant-card col s12">
+            <div class="col s6 edit-variant-on-main">
+                <h3>Вариант {{number}}</h3>
+
+                <form action="/task/removeVariant" method="post" id="removeVariantForm{{@index}}"
+                    class="edit-variant-on-main-form">
+                    <input type="hidden" name="taskId" value="{{@root.task.id}}">
+                    <input type="hidden" name="variantId" value="{{id}}">
+                    <input type="hidden" name="number" value="{{number}}">
+                    <button class="btn btn-primary red btn-action btn-lg" form="removeVariantForm{{@index}}">
+                        Удалить вариант
+                    </button>
+                </form>
+
+                <a href="/task/{{@root.task.id}}/{{number}}/edit">
+                    <button class="btn btn-primary btn-action btn-lg">
+                        Редактировать вариант
+                    </button>
+                </a>
+
+            </div>
+            {{#if subTasks}}
+            <div id="subTasksEditTable">
+                <table class="table answers-table" id="answers">
+                    <thead>
+                        <tr>
+                            <th>Тема</th>
+                            <th>Ответ</th>
+                            <th>Удалить</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {{#each subTasks}}
+                        <tr class="active">
+                            <td>{{name}}</td>
+                            <td>{{answer}}</td>
+                            <td>
+                                <form method="post" id="removeSubTaskForm{{@index}}" action="/task/removeSubTask">
+                                    <input type="hidden" name="id" value="{{@root.task.id}}">
+                                    <input type="hidden" name="subTaskId" value="{{id}}">
+                                    <input type="hidden" name="subTaskName" value="{{name}}">
+                                    <button class="btn btn-primary btn-action btn-lg"
+                                        form="removeSubTaskForm{{@index}}">
+                                        <i class="material-icons dp48">delete_forever</i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+            {{else}}
+            <hr>
+            <h5>Тем для варианта еще не добавлено</h5>
+            {{/if}}
+        </div>
+        {{else}}
+        <h4>Вариантов с темами для работы еще не добавлено</h4>
+        {{/each}}
+    </div>
+
+    <form action="/task/{{task.id}}/addVariant" method="post" class="edit-form">
+        <div class="row">
+            <div class="col s3">
+                <input class="form-input" id="number" name="number" type="text" required>
+                <label class="form-label">Номер варианта</label>
+            </div>
+            <button class="btn btn-success publish-task-btn col s2">Добавить вариант</button>
+        </div>
+    </form>
+
+    <button class="btn btn-success publish-task-btn" form="editTaskForm">Опубликовать работу</button>
+
+    <form action="/task/remove" method="post" class="edit-form">
+        <input type="hidden" name="id" value="{{task.id}}">
+        <button class="btn btn-success red publish-task-btn">Удалить работу</button>
+>>>>>>> role-model
     </form>
 </div>
