@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { validationResult } from 'express-validator'
 import bcrypt from 'bcryptjs'
 import User from '../models/user.js'
+import { onlyAuthPermission } from '../middleware/permission.js'
 import { registerValidators, loginValidators, resetValidators } from '../utils/validators.js'
 
 
@@ -22,7 +23,7 @@ router.get('/register', (req, res) => {
     })
 })
 
-router.get('/logout', (req, res) => {
+router.get('/logout', onlyAuthPermission, (req, res) => {
     req.session.destroy(() => {
         res.redirect('/auth/login')
     })
@@ -98,7 +99,6 @@ router.get('/reset', async (req, res) => {
 router.post('/reset', resetValidators, async (req, res) => {
     try {
         const errors = validationResult(req)
-        // console.log(errors.array()[0].msg)
         if (!errors.isEmpty()) {
             req.flash('resetError', errors.array()[0].msg)
             return res.status(422).redirect('/auth/reset')

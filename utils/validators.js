@@ -123,4 +123,20 @@ const dropValidators = [
         .trim(),
 ]
 
-export { registerValidators, loginValidators, resetValidators, changeValidators, dropValidators }
+const profileValidators = [
+    body('email')
+        .isEmail().withMessage('Введите корректный email')
+        .custom(async (value, { req }) => {
+            try {
+                const user = await User.findOne({ email: value })
+                if (user._id !== req.session.user._id) {
+                    return Promise.reject('Такой email уже занят')
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        })
+        .normalizeEmail(),
+]
+
+export { registerValidators, loginValidators, resetValidators, changeValidators, dropValidators, profileValidators }

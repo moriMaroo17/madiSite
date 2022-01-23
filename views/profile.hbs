@@ -2,10 +2,13 @@
 
 <div class="row">
     <div class="col s6">
+        {{#if profileError}}
+        <p class="alert">{{profileError}}</p>
+        {{/if}}
         <form action="/profile" method="post" enctype="multipart/form-data">
             <div class="input-field">
                 <input id="email" name="email" type="text" class="validate" required value="{{user.email}}">
-                <label for="email">Ваш emali</label>
+                <label for="email">Ваш email</label>
                 <span class="helper-text" data-error="Email не может быть пустым"></span>
             </div>
             <div class="input-field">

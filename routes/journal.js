@@ -20,7 +20,7 @@ router.get('/', teacherPermission, async (req, res) => {
     }
 })
 
-router.get('/watchBySubTask/:id', async (req, res) => {
+router.get('/watchBySubTask/:id', teacherPermission, async (req, res) => {
     try {
         const info = {
             task: '',

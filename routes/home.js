@@ -1,9 +1,10 @@
 import { Router } from 'express'
 import Task from '../models/task.js'
+import { onlyAuthPermission } from '../middleware/permission.js'
 
 const router = new Router()
 
-router.get('/', async (req, res) => {
+router.get('/', onlyAuthPermission, async (req, res) => {
     try {
         const tasks = await Task.find()
 

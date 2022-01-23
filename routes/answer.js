@@ -1,11 +1,12 @@
 import { Router } from 'express'
 
 import Answer from '../models/answer.js'
+import { studentPermission } from '../middleware/permission.js'
 
 const router = new Router()
 
 
-router.post('/', async (req, res) => {
+router.post('/', studentPermission, async (req, res) => {
     try {
         const answer = new Answer({
             userId: req.session.user._id,

@@ -285,9 +285,4 @@ router.get('/:id/:number', studentPermission, async (req, res) => {
     }
 })
 
-router.get('/start', (req, res) => {
-    res.redirect(`task/${req.query.id}/${req.query.variant}`)
-})
-
 export { router as taskRouter }
-
