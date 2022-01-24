@@ -14,13 +14,13 @@
 <hr>
 {{#each task.variants}}
 <div class="card variant-card col s12">
-    <h4><a href="/task/{{@root/task.id}}/{{number}}/">Вариант {{number}}</a></h4>
+    <h4><a href="/task/{{@root.task.id}}/{{number}}/">Вариант {{number}}</a></h4>
     {{#if subTasks}}
     <p>Список тем</p>
     <hr>
     <ul class="collection">
         {{#each subTasks}}
-        <li class="collection-item">{{name}}</li>
+        <li class="collection-item"><a href="/task/{{@root.task.id}}/{{../number}}/{{id}}">{{name}}</a></li>
         {{/each}}
     </ul>
     {{else}}
