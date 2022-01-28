@@ -8,24 +8,15 @@ const answerSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
-    taskId: {
+    ask: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Task',
         required: true
     },
-    variant: {
-        type: Number,
-        required: true
-    },
-    subTaskId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Task',
-        required: true
-    },
-    answer: {
-        type: String,
-        required: true
-    }
+    answer: String,
+    filePath: String,
+    tableAnswer: [{
+        type: String
+    }]
 })
 
 answerSchema.methods.populateSubTask = async function() {

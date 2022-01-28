@@ -129,23 +129,23 @@ router.post('/:id/:number/addSubTask', teacherPermission, async (req, res) => {
         if (!fs.existsSync(`./docs/${task.name}/${req.params.number}/${req.body.name}/`)) {
             fs.mkdirSync(`./docs/${task.name}/${req.params.number}/${req.body.name}/`);
         }
-        if (req.files) {
-            let file = req.files.filePath
+        // if (req.files) {
+        //     let file = req.files.filePath
 
-            file.mv(`./docs/${task.name}/${req.params.number}/${req.body.name}/${req.files.filePath.name}`, (err) => {
-                if (err) {
-                    console.log(err)
-                }
-            })
-            var filePath = `./docs/${task.name}/${req.params.number}/${req.body.name}/${req.files.filePath.name}`
-        } else {
-            var filePath = ''
-        }
+        //     file.mv(`./docs/${task.name}/${req.params.number}/${req.body.name}/${req.files.filePath.name}`, (err) => {
+        //         if (err) {
+        //             console.log(err)
+        //         }
+        //     })
+        //     var filePath = `./docs/${task.name}/${req.params.number}/${req.body.name}/${req.files.filePath.name}`
+        // } else {
+        //     var filePath = ''
+        // }
         await task.addSubTask(req.params.number, {
             name: req.body.name,
-            filePath: filePath,
-            taskText: req.body.taskText,
-            answer: req.body.answer
+            filePath: '',
+            taskText: '',
+            asks: []
         })
         await task.save()
         res.redirect(`/task/${req.params.id}/${req.params.number}/edit`)

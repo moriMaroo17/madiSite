@@ -4,7 +4,8 @@ import mongoose from 'mongoose'
 const taskSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     filePath: String,
     variants: [{
@@ -17,11 +18,14 @@ const taskSchema = new mongoose.Schema({
             {
                 name: {
                     type: String,
-                    required: true
+                    required: true,
+                    unique: true
                 },
                 taskText: String,
                 filePath: String,
-                answer: String
+                asks: [{
+                    type: mongoose.Schema.Types.ObjectId
+                }]
             }
         ],
     }]
