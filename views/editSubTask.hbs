@@ -1,41 +1,81 @@
 <div class="form-group">
-    {{#if forEdit}}
+    {{!-- {{#if forEdit}} --}}
     <form action="./edit" method="post" enctype="multipart/form-data">
-        {{else}}
+        {{!-- {{else}}
         <form action="./addSubTask" method="post" enctype="multipart/form-data">
-            {{/if}}
-            <div class="input-field col s3">
-                <input class="form-input" id="name" name="name" type="text" value="{{subTask.name}}" required>
-                <label for="name">Название темы</label>
-            </div>
-            <div class="input-field col s12">
-                <textarea id="textarea1" class="materialize-textarea" id="taskText"
-                    name="taskText">{{subTask.taskText}}</textarea>
-                <label for="textarea1">Задание</label>
-            </div>
+            {{/if}} --}}
+        <div class="input-field col s3">
+            <input class="form-input" id="name" name="name" type="text" value="{{subTask.name}}" required>
+            <label for="name">Название темы</label>
+        </div>
+        <div class="input-field col s12">
+            <textarea id="textarea1" class="materialize-textarea" id="taskText"
+                name="taskText">{{subTask.taskText}}</textarea>
+            <label for="textarea1">Задание</label>
+        </div>
 
-            {{#if subTask.filePath}}
-            <p>Прикрепленный файл: <a href="/{{subTask.filePath}}" download="{{fileName}}">{{fileName}}</a>
-            </p>
-            <p>
-                <label>
-                    <input id="removeFile" name="removeFile" type="checkbox" />
-                    <span>Удалить файл</span>
-                </label>
-            </p>
-            {{else}}
-            <p>Файл для работы не был добавлен</p>
-            {{/if}}
+        {{#if subTask.filePath}}
+        <p>Прикрепленный файл: <a href="/{{subTask.filePath}}" download="{{fileName}}">{{fileName}}</a>
+        </p>
+        <p>
+            <label>
+                <input id="removeFile" name="removeFile" type="checkbox" />
+                <span>Удалить файл</span>
+            </label>
+        </p>
+        {{else}}
+        <p>Файл для работы не был добавлен</p>
+        {{/if}}
 
-            <div class="col s3">
-                <input class="form-input" id="filePath" name="filePath" type="file">
+        <div class="col s3">
+            <input class="form-input" id="filePath" name="filePath" type="file">
+        </div>
+
+        {{#if asks}}
+        <div id="asksEditTable">
+            <table class="table answers-table" id="answers">
+                <thead>
+                    <tr>
+                        <th>Вопрос</th>
+                        <th>Ответ</th>
+                        <th>Таблица</th>
+                        <th>Размер</th>
+                        <th>Удалить</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {{#each asks}}
+                    <tr class="active">
+                        <td>{{askText}}</td>
+                        <td>{{rightAnswer}}</td>
+                        <td>{{isTable}}</td>
+                        <td>{{size}}</td>
+                        <td>
+                            <form method="post" id="removeAskForm{{@index}}" action="/task/{{@root.taskId}}/{{@root.number}}/{{@root.subTask.id}}/removeAsk">
+                                {{!-- <input type="hidden" name="id" value="{{@root.id}}">
+                                <input type="hidden" name="subTaskId" value="{{_id}}">
+                                <input type="hidden" name="variantId" value="{{@root.variant.id}}"> --}}
+                                <button class="btn btn-primary btn-action btn-lg" form="removeAskForm{{@index}}">
+                                    <i class="material-icons dp48">delete_forever</i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        {{else}}
+        <h4>Ответов еще не добавлено</h4>
+        {{/if}}
+
+        <form action="/task/{{@root.taskId}}/{{@root.number}}/{{@root.subTask.id}}/addAsk" method="get" class="edit-form">
+            <div class="row">
+                <button class="btn btn-success publish-task-btn col s3">Добавить вопрос</button>
             </div>
-
-            <div class="input-field col s3">
-                <input class="form-input" id="answer" name="answer" type="text" value="{{subTask.answer}}">
-                <label for="answer">Ответ</label>
-            </div>
-
-            <button class="btn btn-success publish-task-btn col s3">Опубликовать тему</button>
         </form>
+
+        <button class="btn btn-success publish-task-btn col s3">Опубликовать тему</button>
+    </form>
 </div>

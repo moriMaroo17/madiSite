@@ -14,9 +14,9 @@ const answerSchema = new mongoose.Schema({
     },
     answer: String,
     filePath: String,
-    tableAnswer: [{
+    tableAnswer: [[{
         type: String
-    }]
+    }]]
 })
 
 answerSchema.methods.populateSubTask = async function() {

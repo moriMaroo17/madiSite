@@ -66,6 +66,16 @@ router.post('/register', registerValidators, async (req, res) => {
 
         const hashPassword = await bcrypt.hash(password, 10)
 
+        if (!req.session.user) {
+            const user = new User({
+                email,
+                name,
+                password: hashPassword,
+            })
+            await user.save()
+            return res.redirect('/auth/login')
+        }
+
         if (req.session.user.role === 'admin') {
             const user = new User({
                 email,
@@ -74,7 +84,7 @@ router.post('/register', registerValidators, async (req, res) => {
                 role: req.body.role
             })
             await user.save()
-            res.redirect('/admin')
+            return res.redirect('/admin')
         } else {
             const user = new User({
                 email,
@@ -82,7 +92,7 @@ router.post('/register', registerValidators, async (req, res) => {
                 password: hashPassword,
             })
             await user.save()
-            res.redirect('/auth/login')
+            return res.redirect('/auth/login')
         }
     } catch (error) {
         console.log(error)

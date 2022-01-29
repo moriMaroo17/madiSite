@@ -2,6 +2,7 @@ import fs from 'fs'
 import { Router } from 'express'
 import Task from '../models/task.js'
 import Answer from '../models/answer.js'
+import Ask from '../models/ask.js'
 import { teacherPermission, studentPermission } from '../middleware/permission.js'
 
 const router = new Router()
@@ -64,13 +65,13 @@ router.get('/:id/:number/edit', teacherPermission, async (req, res) => {
     }
 })
 
-router.get('/:id/:number/addSubTask', teacherPermission, async (req, res) => {
-    res.render('editSubTask', {
-        title: 'Добавить тему',
-        subTask: {},
-        forEdit: false
-    })
-})
+// router.get('/:id/:number/addSubTask', teacherPermission, async (req, res) => {
+//     res.render('editSubTask', {
+//         title: 'Добавить тему',
+//         subTask: {},
+//         forEdit: false
+//     })
+// })
 
 router.post('/:id/:number/editVariant', teacherPermission, async (req, res) => {
     try {
@@ -148,7 +149,8 @@ router.post('/:id/:number/addSubTask', teacherPermission, async (req, res) => {
             asks: []
         })
         await task.save()
-        res.redirect(`/task/${req.params.id}/${req.params.number}/edit`)
+        const subTask = await task.getSubTaskByName(req.params.number, req.body.name)
+        res.redirect(`/task/${req.params.id}/${req.params.number}/${subTask.id}/edit`)
     } catch (error) {
         console.log(error)
     }
@@ -164,8 +166,9 @@ router.get('/:id/:number/:subId/edit', teacherPermission, async (req, res) => {
             fileName = subTask.filePath.split('/')[subTask.filePath.split('/').length - 1]
         }
         res.render('editSubTask', {
+            taskId: task.id,
+            number: variant.number,
             subTask,
-            forEdit: true,
             fileName
         })
     } catch (error) {
@@ -204,6 +207,14 @@ router.post('/:id/:number/:subId/edit', teacherPermission, async (req, res) => {
     } catch (error) {
         console.log(error)
     }
+})
+
+router.post('/:id/:number/:subId/addAsk', teacherPermission, async (req, res) => {
+    
+})
+
+router.post('/:id/:number/:subId/removeAsk', teacherPermission, async (req, res) => {
+
 })
 
 router.post('/removeVariant', teacherPermission, async (req, res) => {

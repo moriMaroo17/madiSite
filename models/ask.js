@@ -23,8 +23,8 @@ const askSchema = new mongoose.Schema({
         required: true
     },
     table: {
-        head: [{
-            type: String,
+        columns: [{
+            type: Number,
             required: true
         }],
         rows: {

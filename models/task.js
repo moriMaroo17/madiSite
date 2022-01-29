@@ -123,4 +123,13 @@ taskSchema.methods.updateSubTaskById = function (number, subId, name, taskText, 
     }
 }
 
+taskSchema.methods.getSubTaskByName = function (number, name) {
+    const variant = this.getVariantByNumber(number)
+    for (let i = 0; i < variant.subTasks.length; i++) {
+        if (variant.subTasks[i].name === name) {
+            return variant.subTasks[i]
+        }
+    }
+}
+
 export default mongoose.model('Task', taskSchema)
