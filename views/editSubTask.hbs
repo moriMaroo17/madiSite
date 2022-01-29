@@ -1,6 +1,6 @@
 <div class="form-group">
     {{!-- {{#if forEdit}} --}}
-    <form action="./edit" method="post" enctype="multipart/form-data">
+    <form action="./edit" method="post" enctype="multipart/form-data" id="editSubTaskForm">
         {{!-- {{else}}
         <form action="./addSubTask" method="post" enctype="multipart/form-data">
             {{/if}} --}}
@@ -9,7 +9,7 @@
             <label for="name">Название темы</label>
         </div>
         <div class="input-field col s12">
-            <textarea id="textarea1" class="materialize-textarea" id="taskText"
+            <textarea class="materialize-textarea" id="taskText"
                 name="taskText">{{subTask.taskText}}</textarea>
             <label for="textarea1">Задание</label>
         </div>
@@ -52,10 +52,8 @@
                         <td>{{isTable}}</td>
                         <td>{{size}}</td>
                         <td>
-                            <form method="post" id="removeAskForm{{@index}}" action="/task/{{@root.taskId}}/{{@root.number}}/{{@root.subTask.id}}/removeAsk">
-                                {{!-- <input type="hidden" name="id" value="{{@root.id}}">
-                                <input type="hidden" name="subTaskId" value="{{_id}}">
-                                <input type="hidden" name="variantId" value="{{@root.variant.id}}"> --}}
+                            <form method="post" id="removeAskForm{{@index}}"
+                                action="/ask/remove">
                                 <button class="btn btn-primary btn-action btn-lg" form="removeAskForm{{@index}}">
                                     <i class="material-icons dp48">delete_forever</i>
                                 </button>
@@ -67,15 +65,25 @@
             </table>
         </div>
         {{else}}
-        <h4>Ответов еще не добавлено</h4>
+        <h4>Вопросов еще не добавлено</h4>
         {{/if}}
-
-        <form action="/task/{{@root.taskId}}/{{@root.number}}/{{@root.subTask.id}}/addAsk" method="get" class="edit-form">
-            <div class="row">
-                <button class="btn btn-success publish-task-btn col s3">Добавить вопрос</button>
-            </div>
-        </form>
-
-        <button class="btn btn-success publish-task-btn col s3">Опубликовать тему</button>
     </form>
+    <form action="/ask/add" method="post" id="addAskForm"
+        class="edit-form">
+        <input type="hidden" name="taskId" value="{{@root.taskId}}">
+        <input type="hidden" name="number" value="{{@root.number}}">
+        <input type="hidden" name="subId" value="{{@root.subTask.id}}">
+        <div class="row">
+            <p class="col s2">
+                <label>
+                    <input id="isTable" name="isTable" type="checkbox"/>
+                    <span>Таблица</span>
+                </label>
+            </p>
+            <button class="btn btn-success publish-task-btn col s3" form="addAskForm">Добавить вопрос</button>
+        </div>
+    </form>
+
+    <button class="btn btn-success publish-task-btn col s3" form="editSubTaskForm">Опубликовать тему</button>
+
 </div>

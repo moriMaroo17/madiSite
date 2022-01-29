@@ -23,9 +23,6 @@ const taskSchema = new mongoose.Schema({
                 },
                 taskText: String,
                 filePath: String,
-                asks: [{
-                    type: mongoose.Schema.Types.ObjectId
-                }]
             }
         ],
     }]
@@ -119,15 +116,6 @@ taskSchema.methods.updateSubTaskById = function (number, subId, name, taskText, 
         if (variant.subTasks[i].id === subTask.id) {
             variant.subTasks[i] = subTask
             return this.save()
-        }
-    }
-}
-
-taskSchema.methods.getSubTaskByName = function (number, name) {
-    const variant = this.getVariantByNumber(number)
-    for (let i = 0; i < variant.subTasks.length; i++) {
-        if (variant.subTasks[i].name === name) {
-            return variant.subTasks[i]
         }
     }
 }

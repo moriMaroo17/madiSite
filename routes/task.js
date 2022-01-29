@@ -148,9 +148,8 @@ router.post('/:id/:number/addSubTask', teacherPermission, async (req, res) => {
             taskText: '',
             asks: []
         })
-        await task.save()
-        const subTask = await task.getSubTaskByName(req.params.number, req.body.name)
-        res.redirect(`/task/${req.params.id}/${req.params.number}/${subTask.id}/edit`)
+        const result = await task.save()
+        res.redirect(`/task/${req.params.id}/${req.params.number}/${result._id}/edit`)
     } catch (error) {
         console.log(error)
     }
@@ -161,6 +160,7 @@ router.get('/:id/:number/:subId/edit', teacherPermission, async (req, res) => {
         const task = await Task.findById(req.params.id)
         const variant = await task.getVariantByNumber(req.params.number)
         const subTask = await task.getSubTaskById(variant.id, req.params.subId)
+        const asks = await Ask.find({taskId: req.params.id, variant: req.params.number, subTaskId: req.params.subId})
         let fileName = ''
         if (subTask.filePath) {
             fileName = subTask.filePath.split('/')[subTask.filePath.split('/').length - 1]
@@ -169,7 +169,8 @@ router.get('/:id/:number/:subId/edit', teacherPermission, async (req, res) => {
             taskId: task.id,
             number: variant.number,
             subTask,
-            fileName
+            fileName,
+            asks
         })
     } catch (error) {
         console.log(error)
@@ -209,13 +210,31 @@ router.post('/:id/:number/:subId/edit', teacherPermission, async (req, res) => {
     }
 })
 
-router.post('/:id/:number/:subId/addAsk', teacherPermission, async (req, res) => {
-    
-})
+// router.post('/:id/:number/:subId/addAsk', teacherPermission, async (req, res) => {
+//     try {
+//         let isTable
+//         if (req.body.isTable === 'on') {
+//             isTable = true
+//         } else {
+//             isTable = false
+//         }
+//         const ask = new Ask({
+//             taskId: req.params.id,
+//             variant: req.params.number,
+//             subTaskId: req.params.subId,
+//             isTable: isTable
+//         })
 
-router.post('/:id/:number/:subId/removeAsk', teacherPermission, async (req, res) => {
+//         const result = await ask.save()
+//         res.redirect('/')
+//     } catch (error) {
+//         console.log(error)
+//     }
+// })
 
-})
+// router.post('/:id/:number/:subId/removeAsk', teacherPermission, async (req, res) => {
+
+// })
 
 router.post('/removeVariant', teacherPermission, async (req, res) => {
     try {

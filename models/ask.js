@@ -23,14 +23,14 @@ const askSchema = new mongoose.Schema({
         required: true
     },
     table: {
-        columns: [{
+        columns: {
             type: Number,
             required: true
-        }],
+        },
         rows: {
             type: Number,
             required: true
-        }
+        },
     },
     rightAnswer: String
 })

@@ -1,0 +1,25 @@
+<form action="/ask/{{ask.id}}/edit" method="post" enctype="multipart/form-data" name="addVariantForm">
+    <div class="input-field col s6">
+        <textarea id="askText" name="askText" class="materialize-textarea">{{ask.askText}}</textarea>
+        <label for="askText">Текст вопроса</label>
+    </div>
+
+    <div class="input-field col s6">
+        <input id="rightAnswer" name="rightAnswer" type="text" value="{{ask.rightAnswer}}"/>
+        <label for="rightAnswer">Правильный ответ</label>
+    </div>
+
+    {{#if ask.isTable}}
+    <div class="input-field col s6">
+        <input id="columns" name="columns" value="{{ask.table.columns}}" type="number"/>
+        <label for="columns">Количество колонок</label>
+    </div>
+    <div class="input-field col s6">
+        <input id="rows" name="rows" value="{{aks.table.rows}}" type="number"/>
+        <label for="rows">Количество строк</label>
+    </div>
+    {{/if}}
+
+    <button type="submit" class="btn btn-success publish-task-btn col s3">Опубликовать
+        Вопрос</button>
+</form>
