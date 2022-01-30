@@ -1,0 +1,48 @@
+<div>
+    <div class="col s12">
+        <h4 id="askText">{{ask.askText}}</h4>
+        <label for="askText">Задание</label>
+    </div>
+
+    <form action="/answer" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="id" value="{{ask.id}}">
+        <input type="hidden" name="isTable" value="{{ask.isTable}}">
+        <input type="hidden" name="answerId" value="{{answer.id}}">
+        <div class="file-field input-field">
+            <div class="btn">
+                <span>Файл</span>
+                <input type="file" name="filePath">
+            </div>
+            <div class="file-path-wrapper">
+                <input class="file-path validate" type="text">
+            </div>
+        </div>
+        {{#if ask.isTable}}
+        <button class="btn btn-success publish-task-btn col s3">Отправить ответ</button>
+        <h5>Таблица</h5>
+        <div class="col s6">
+            <table class="table-for-ask">
+                <tbody>
+                    {{#each table as | row |}}
+                    <tr>
+                        {{#each row as | column |}}
+                        <td>
+                            <div class="input-field">
+                                <input class="form-input" id="{{@../index}}-{{@index}}" name="tableInput-{{@../index}}-{{@index}}" type="text" value="{{@root.answer.tableAnswer.[0].[0]}}">
+                            </div>
+                        </td>
+                        {{/each}}
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        {{else}}
+        <div class="input-field col s3">
+            <input class="form-input" id="answer" name="answer" type="text">
+            <label for="name">Ответ</label>
+        </div>
+        <button class="btn btn-success publish-task-btn col s3">Отправить ответ</button>
+        {{/if}}
+    </form>
+</div>

@@ -15,8 +15,14 @@
         {{else}}
         <p>Файл для работы не был добавлен</p>
         {{/if}}
-        <div class="input-field col s6">
-            <input id="filePath" name="filePath" type="file">
+        <div class="file-field input-field">
+            <div class="btn">
+                <span>Файл</span>
+                <input class="form-input" id="filePath" name="filePath" type="file">
+            </div>
+            <div class="file-path-wrapper">
+                <input class="file-path validate" type="text">
+            </div>
         </div>
 
         <input type="hidden" name="id" value="{{task.id}}">

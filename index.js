@@ -25,6 +25,8 @@ import { profileRouter } from './routes/profile.js'
 import { adminRouter } from './routes/admin.js'
 import { askRouter } from './routes/ask.js'
 
+import times from './utils/hbs-helpers.js'
+
 const require = createRequire(import.meta.url);
 
 const keys = require('./keys/keys.json')
@@ -39,7 +41,8 @@ const app = express()
 const hbs = exhbs.create({
     defaultLayout: 'main',
     extname: 'hbs',
-    handlebars: allowInsecurePrototypeAccess(Handlebars)
+    handlebars: allowInsecurePrototypeAccess(Handlebars),
+    helpers: times
 })
 
 const store = new MongoStore({

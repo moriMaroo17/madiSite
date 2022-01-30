@@ -14,22 +14,35 @@
     <p>{{subTask.taskText}}</p>
 </div>
 
-{{#if subTask.answer}}
-<form action="/answer" method="post" class="answer-form">
-    <input type="hidden" name="taskId" value="{{@root.taskId}}">
-    <input type="hidden" name="variantNumber" value="{{@root.variantNumber}}">
-    <input type="hidden" name="subTaskId" value="{{subTask.id}}">
-    <div class="input-field col s6">
-        <input id="answer" name="answer" type="text" value="{{@root.answer.answer}}">
-        <label for="first_name">Ответ</label>
-    </div>
-    {{#if @root.answer}}
-    <input type="hidden" name="answerId" id="answerId" value="{{@root.answer.id}}">
-    {{/if}}
-    <button class="btn waves-effect waves-light" type="submit" name="action">Отправить ответ
-        <i class="material-icons right">send</i>
-    </button>
-</form>
+{{#if asks}}
+<div id="answersEditTable">
+    <table class="table answers-table" id="answers">
+        <thead>
+            <tr>
+                <th>Вопрос</th>
+                <th>Таблица</th>
+                <th>Добавить ответ</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {{#each asks}}
+            <tr class="active">
+                <td>{{askText}}</td>
+                {{#if isTable}}
+                <td><i class="material-icons dp48">check</i></td>
+                {{else}}
+                <td><i class="material-icons dp48">close</i></td>
+                {{/if}}
+                <td><a href="/answer/{{_id}}/"><button class="btn waves-effect waves-light">Открыть вопрос</button></a>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+{{else}}
+<h4>Вопросов еще не добавлено</h4>
 {{/if}}
 
 <a href="/task/{{taskId}}/{{variantNumber}}">

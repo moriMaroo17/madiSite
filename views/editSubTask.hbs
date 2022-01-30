@@ -9,8 +9,7 @@
             <label for="name">Название темы</label>
         </div>
         <div class="input-field col s12">
-            <textarea class="materialize-textarea" id="taskText"
-                name="taskText">{{subTask.taskText}}</textarea>
+            <textarea class="materialize-textarea" id="taskText" name="taskText">{{subTask.taskText}}</textarea>
             <label for="textarea1">Задание</label>
         </div>
 
@@ -26,67 +25,70 @@
         {{else}}
         <p>Файл для работы не был добавлен</p>
         {{/if}}
-
-        <div class="col s3">
-            <input class="form-input" id="filePath" name="filePath" type="file">
+        <div class="file-field input-field">
+            <div class="btn">
+                <span>Файл</span>
+                <input class="form-input" id="filePath" name="filePath" type="file">
+            </div>
+            <div class="file-path-wrapper">
+                <input class="file-path validate" type="text">
+            </div>
         </div>
     </form>
-        {{#if asks}}
-        <div id="asksEditTable">
-            <table class="table answers-table" id="answers">
-                <thead>
-                    <tr>
-                        <th>Вопрос</th>
-                        <th>Ответ</th>
-                        <th>Таблица</th>
-                        <th>Размер</th>
-                        <th>Редактировать</th>
-                        <th>Удалить</th>
-                    </tr>
-                </thead>
+    {{#if asks}}
+    <div id="asksEditTable">
+        <table class="table answers-table" id="answers">
+            <thead>
+                <tr>
+                    <th>Вопрос</th>
+                    <th>Ответ</th>
+                    <th>Таблица</th>
+                    <th>Размер</th>
+                    <th>Редактировать</th>
+                    <th>Удалить</th>
+                </tr>
+            </thead>
 
-                <tbody>
-                    {{#each asks}}
-                    <tr class="active">
-                        <td>{{askText}}</td>
-                        {{#if isTable}}
-                        <td><i class="material-icons dp48">close</i></td>
-                        <td><i class="material-icons dp48">check</i></td>
-                        <td>{{size}}</td>
-                        {{else}}
-                        <td>{{rightAnswer}}</td>
-                        <td><i class="material-icons dp48">close</i></td>
-                        <td><i class="material-icons dp48">close</i></td>
-                        {{/if}}
-                        <td><a href="/ask/{{_id}}/edit"><button
+            <tbody>
+                {{#each asks}}
+                <tr class="active">
+                    <td>{{askText}}</td>
+                    {{#if isTable}}
+                    <td><i class="material-icons dp48">close</i></td>
+                    <td><i class="material-icons dp48">check</i></td>
+                    <td>{{size}}</td>
+                    {{else}}
+                    <td>{{rightAnswer}}</td>
+                    <td><i class="material-icons dp48">close</i></td>
+                    <td><i class="material-icons dp48">close</i></td>
+                    {{/if}}
+                    <td><a href="/ask/{{_id}}/edit"><button
                                 class="btn waves-effect waves-light">Редактировать</button></a></td>
-                        <td>
-                            <form method="post" id="removeAskForm{{@index}}"
-                                action="/ask/remove">
-                                <input type="hidden" name="id" value="{{_id}}">
-                                <button class="btn btn-primary btn-action btn-lg" form="removeAskForm{{@index}}">
-                                    <i class="material-icons dp48">delete_forever</i>
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                    {{/each}}
-                </tbody>
-            </table>
-        </div>
-        {{else}}
-        <h4>Вопросов еще не добавлено</h4>
-        {{/if}}
-    
-    <form action="/ask/add" method="post" id="addAskForm"
-        class="edit-form">
+                    <td>
+                        <form method="post" id="removeAskForm{{@index}}" action="/ask/remove">
+                            <input type="hidden" name="id" value="{{_id}}">
+                            <button class="btn btn-primary btn-action btn-lg" form="removeAskForm{{@index}}">
+                                <i class="material-icons dp48">delete_forever</i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+    {{else}}
+    <h4>Вопросов еще не добавлено</h4>
+    {{/if}}
+
+    <form action="/ask/add" method="post" id="addAskForm" class="edit-form">
         <input type="hidden" name="taskId" value="{{@root.taskId}}">
         <input type="hidden" name="number" value="{{@root.number}}">
         <input type="hidden" name="subId" value="{{@root.subTask.id}}">
         <div class="row">
             <p class="col s2">
                 <label>
-                    <input id="isTable" name="isTable" type="checkbox"/>
+                    <input id="isTable" name="isTable" type="checkbox" />
                     <span>Таблица</span>
                 </label>
             </p>

@@ -46,3 +46,8 @@
 .nav-wrapper {
     background-color: #4682B4;
 }
+
+.table-for-ask td  {
+    border: 1px solid #4682B4;
+    border-collapse: collapse;
+}

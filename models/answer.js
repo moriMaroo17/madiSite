@@ -10,6 +10,7 @@ const answerSchema = new mongoose.Schema({
     },
     ask: {
         type: mongoose.Schema.Types.ObjectId,
+        ref: 'Ask',
         required: true
     },
     answer: String,

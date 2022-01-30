@@ -1,3 +1,4 @@
+import fs from 'fs'
 import { Router } from 'express'
 import Ask from '../models/ask.js'
 import { teacherPermission} from '../middleware/permission.js'
@@ -24,6 +25,7 @@ router.post('/add', teacherPermission, async (req, res) => {
         })
 
         const result = await ask.save()
+        fs.mkdirSync(`./answers/${result._id}`)
         res.redirect(`${result._id}/edit`)
     } catch (error) {
         console.log(error)
@@ -50,6 +52,9 @@ router.post('/edit', teacherPermission, async (req, res) => {
         if (ask.isTable) {
             ask.table.columns = req.body.columns
             ask.table.rows = req.body.rows
+        }
+        if (!fs.existsSync(`./answers/${ask.id}`)) {
+            fs.mkdirSync(`./answers/${ask.id}`)
         }
         await ask.save()
         res.redirect(`/task/${ask.taskId}/${ask.variant}/${ask.subTaskId}/edit`)
