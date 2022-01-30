@@ -161,6 +161,9 @@ router.get('/:id/:number/:subId/edit', teacherPermission, async (req, res) => {
         const variant = await task.getVariantByNumber(req.params.number)
         const subTask = await task.getSubTaskById(variant.id, req.params.subId)
         const asks = await Ask.find({taskId: req.params.id, variant: req.params.number, subTaskId: req.params.subId})
+        asks.map(ask => {
+            ask.size = `${ask.table.columns} X ${ask.table.rows}`
+        })
         let fileName = ''
         if (subTask.filePath) {
             fileName = subTask.filePath.split('/')[subTask.filePath.split('/').length - 1]

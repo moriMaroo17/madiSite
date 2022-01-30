@@ -30,7 +30,7 @@
         <div class="col s3">
             <input class="form-input" id="filePath" name="filePath" type="file">
         </div>
-
+    </form>
         {{#if asks}}
         <div id="asksEditTable">
             <table class="table answers-table" id="answers">
@@ -40,6 +40,7 @@
                         <th>Ответ</th>
                         <th>Таблица</th>
                         <th>Размер</th>
+                        <th>Редактировать</th>
                         <th>Удалить</th>
                     </tr>
                 </thead>
@@ -48,12 +49,21 @@
                     {{#each asks}}
                     <tr class="active">
                         <td>{{askText}}</td>
-                        <td>{{rightAnswer}}</td>
-                        <td>{{isTable}}</td>
+                        {{#if isTable}}
+                        <td><i class="material-icons dp48">close</i></td>
+                        <td><i class="material-icons dp48">check</i></td>
                         <td>{{size}}</td>
+                        {{else}}
+                        <td>{{rightAnswer}}</td>
+                        <td><i class="material-icons dp48">close</i></td>
+                        <td><i class="material-icons dp48">close</i></td>
+                        {{/if}}
+                        <td><a href="/ask/{{_id}}/edit"><button
+                                class="btn waves-effect waves-light">Редактировать</button></a></td>
                         <td>
                             <form method="post" id="removeAskForm{{@index}}"
                                 action="/ask/remove">
+                                <input type="hidden" name="id" value="{{_id}}">
                                 <button class="btn btn-primary btn-action btn-lg" form="removeAskForm{{@index}}">
                                     <i class="material-icons dp48">delete_forever</i>
                                 </button>
@@ -67,7 +77,7 @@
         {{else}}
         <h4>Вопросов еще не добавлено</h4>
         {{/if}}
-    </form>
+    
     <form action="/ask/add" method="post" id="addAskForm"
         class="edit-form">
         <input type="hidden" name="taskId" value="{{@root.taskId}}">

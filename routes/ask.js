@@ -30,13 +30,39 @@ router.post('/add', teacherPermission, async (req, res) => {
     }
 })
 
-router.get('/:askId/edit', async (req, res) => {
+router.get('/:askId/edit', teacherPermission, async (req, res) => {
     try {
         const ask = await Ask.findById(req.params.askId)
         res.render('editAsk', {
             title: 'Редактировать вопрос',
             ask
         })
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+router.post('/edit', teacherPermission, async (req, res) => {
+    try {
+        const ask = await Ask.findById(req.body.askId)
+        ask.askText = req.body.askText
+        ask.rightAnswer = req.body.rightAnswer
+        if (ask.isTable) {
+            ask.table.columns = req.body.columns
+            ask.table.rows = req.body.rows
+        }
+        await ask.save()
+        res.redirect(`/task/${ask.taskId}/${ask.variant}/${ask.subTaskId}/edit`)
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+router.post('/remove', teacherPermission, async (req, res) => {
+    try {
+        const ask = await Ask.findById(req.body.id)
+        await Ask.deleteOne({ _id: req.body.id })
+        res.redirect(`/task/${ask.taskId}/${ask.variant}/${ask.subTaskId}/edit`)
     } catch (error) {
         console.log(error)
     }
