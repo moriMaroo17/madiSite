@@ -28,7 +28,7 @@
                         {{#each row as | column |}}
                         <td>
                             <div class="input-field">
-                                <input class="form-input" id="{{@../index}}-{{@index}}" name="tableInput-{{@../index}}-{{@index}}" type="text" value="{{@root.answer.tableAnswer.[0].[0]}}">
+                                <input class="form-input" id="{{@../index}}-{{@index}}" name="tableInput-{{@../index}}-{{@index}}" type="text" value="{{column}}">
                             </div>
                         </td>
                         {{/each}}

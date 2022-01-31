@@ -11,19 +11,25 @@ router.get('/:id', studentPermission, async (req, res) => {
     try {
         let table = []
         const ask = await Ask.findById(req.params.id)
-        if (ask.isTable) {
-            for (let i = 0; i < ask.table.rows; i++) {
-                let row = []
-                for (let j = 0; j < ask.table.columns; j++) {
-                    row.push('')
-                }
-                table.push(row)
-            }
-            console.log(table)
-        }
+
         // console.log(ask.id)
         // console.log(req.session.user._id)
         const answer = await Answer.findOne({ ask: ask.id, userId: req.session.user._id })
+        if (ask.isTable) {
+            if (answer) {
+                table = answer.tableAnswer
+            } else {
+                for (let i = 0; i < ask.table.rows; i++) {
+                    let row = []
+                    for (let j = 0; j < ask.table.columns; j++) {
+                        row.push('')
+                    }
+                    table.push(row)
+                }
+                console.log(table)
+            }
+        }
+
         console.log(answer)
         res.render('answer', {
             title: 'Добавление ответа',
