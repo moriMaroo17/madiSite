@@ -8,6 +8,18 @@
         <input type="hidden" name="id" value="{{ask.id}}">
         <input type="hidden" name="isTable" value="{{ask.isTable}}">
         <input type="hidden" name="answerId" value="{{answer.id}}">
+        {{#if answer.filePath}}
+        <p>Прикрепленный файл: <a href="/{{answer.filePath}}" download="{{fileName}}">{{fileName}}</a>
+        </p>
+        <p>
+            <label>
+                <input id="removeFile" name="removeFile" type="checkbox" />
+                <span>Удалить файл</span>
+            </label>
+        </p>
+        {{else}}
+        <p>Файл для работы не был добавлен</p>
+        {{/if}}
         <div class="file-field input-field">
             <div class="btn">
                 <span>Файл</span>
@@ -39,7 +51,7 @@
         </div>
         {{else}}
         <div class="input-field col s3">
-            <input class="form-input" id="answer" name="answer" type="text">
+            <input class="form-input" id="answer" name="answer" type="text" value="{{answer.answer}}">
             <label for="name">Ответ</label>
         </div>
         <button class="btn btn-success publish-task-btn col s3">Отправить ответ</button>

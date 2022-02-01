@@ -12,8 +12,6 @@ router.get('/:id', studentPermission, async (req, res) => {
         let table = []
         const ask = await Ask.findById(req.params.id)
 
-        // console.log(ask.id)
-        // console.log(req.session.user._id)
         const answer = await Answer.findOne({ ask: ask.id, userId: req.session.user._id })
         if (ask.isTable) {
             if (answer) {
@@ -29,13 +27,18 @@ router.get('/:id', studentPermission, async (req, res) => {
                 console.log(table)
             }
         }
+        let fileName = ''
+        if (answer.filePath) {
+            fileName = answer.filePath.split('/')[answer.filePath.split('/').length - 1]
+        }
 
         console.log(answer)
         res.render('answer', {
             title: 'Добавление ответа',
             ask,
             table,
-            answer
+            answer,
+            fileName
         })
     } catch (error) {
         console.log(error)
@@ -48,21 +51,22 @@ router.post('/', studentPermission, async (req, res) => {
         let tableAnswer = []
         let filePath = ''
         const answerText = req.body.answer !== undefined ? req.body.answer : ''
-        if (!fs.existsSync(`./answers/${ask.id}/${req.session.user.id}/`)) {
-            fs.mkdirSync(`./answers/${ask.id}/${req.session.user.id}/`)
+        if (!fs.existsSync(`./answers/${ask.id}/${req.session.user._id}/`)) {
+            fs.mkdirSync(`./answers/${ask.id}/${req.session.user._id}/`)
         }
-        if (req.files) {
+        if (req.body.removeFile === 'on' && req.body.answerId) {
+            const answer = await Answer.findById(req.body.answerId)
+            fs.rmSync(answer.filePath, { recursive: true, force: true })
+            filePath = ''
+        } else if (req.files) {
             let file = req.files.filePath
-            // console.log(file)
-            // if (fs.existsSync(task.filePath)) {
-            //     fs.rmSync(task.filePath, { recursive: true, force: true })
-            // }
-            file.mv(`./answers/${ask.id}/${req.session.user.id}/${req.files.filePath.name}`, (err) => {
+
+            file.mv(`./answers/${ask.id}/${req.session.user._id}/${req.files.filePath.name}`, (err) => {
                 if (err) {
                     console.log(err)
                 }
             })
-            filePath = `./answers/${ask.id}/${req.session.user.id}/${req.files.filePath.name}`
+            filePath = `./answers/${ask.id}/${req.session.user._id}/${req.files.filePath.name}`
         }
         if (req.body.isTable) {
             let tableObj = []
@@ -101,7 +105,7 @@ router.post('/', studentPermission, async (req, res) => {
             }
             answer.answer = req.body.answer
             answer.tableAnswer = tableAnswer
-            answer.filePath = filePath ? filePath : answer.filePath
+            answer.filePath = (filePath || req.body.removeFile === 'on') ? filePath : answer.filePath
             await answer.save()
         } else {
             const answer = new Answer({
