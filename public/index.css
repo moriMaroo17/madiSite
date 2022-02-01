@@ -55,3 +55,21 @@
 .back-button {
     margin-top: 10px;
 }
+
+.answer-card {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    /* line-height: 16px;     */
+    max-height: 140px;     
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    /* display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis; */
+    /* width: 350px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; */
+}

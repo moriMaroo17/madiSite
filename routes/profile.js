@@ -11,9 +11,10 @@ const router = new Router()
 
 router.get('/', onlyAuthPermission, async (req, res) => {
     try {
-        const answers = await Answer.find({userId: req.user.id}).populate({ path: 'userId', select: ['name', 'email'] }).populate({ path: 'taskId', select: 'name' }).sort({'taskId': 1})
+        const answers = await Answer.find({ userId: req.user.id }).populate({ path: 'userId', select: ['name', 'email'] }).populate({ path: 'ask' }).sort({'taskId': 1})
         for (let i = 0; i < answers.length; i++) {
-            answers[i] = await answers[i].populateSubTask()
+            answers[i] = await answers[i].populateAllTaskFields()
+            console.log(answers[i])
         }
         res.render('profile', {
             title: 'Профиль',
