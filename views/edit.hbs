@@ -70,6 +70,7 @@
                                 <form method="post" id="removeSubTaskForm{{@index}}" action="/task/removeSubTask">
                                     <input type="hidden" name="id" value="{{@root.task.id}}">
                                     <input type="hidden" name="subTaskId" value="{{id}}">
+                                    <input type="hidden" name="variantId", value="{{../id}}">
                                     <input type="hidden" name="subTaskName" value="{{name}}">
                                     <button class="btn btn-primary btn-action btn-lg"
                                         form="removeSubTaskForm{{@index}}">

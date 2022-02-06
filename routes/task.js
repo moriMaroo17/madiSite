@@ -21,7 +21,8 @@ router.post('/remove', teacherPermission, async (req, res) => {
 router.post('/removeSubTask', teacherPermission, async (req, res) => {
     try {
         const task = await Task.findById(req.body.id)
-        fs.rmSync(`./docs/${task.name}/${req.body.subTaskName}`, { recursive: true, force: true })
+        const variant = await task.getVariantById(req.body.variantId)
+        fs.rmSync(`./docs/${task.name}/${variant.number}/${req.body.subTaskName}`, { recursive: true, force: true })
         await task.deleteSubTaskById(req.body.variantId, req.body.subTaskId)
         res.redirect(`/task/${req.body.id}/edit`)
     } catch (error) {
@@ -122,13 +123,13 @@ router.post('/:id/:number/addSubTask', teacherPermission, async (req, res) => {
         if (!fs.existsSync(`./docs/${task.name}/${req.params.number}/${req.body.name}/`)) {
             fs.mkdirSync(`./docs/${task.name}/${req.params.number}/${req.body.name}/`);
         }
-        await task.addSubTask(req.params.number, {
+        const result = await task.addSubTask(req.params.number, {
             name: req.body.name,
             filePath: '',
             taskText: '',
             asks: []
         })
-        const result = await task.save()
+        console.log(result)
         res.redirect(`/task/${req.params.id}/${req.params.number}/${result._id}/edit`)
     } catch (error) {
         console.log(error)

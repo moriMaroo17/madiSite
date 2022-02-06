@@ -45,15 +45,22 @@ taskSchema.methods.getVariantById = function (id) {
 }
 
 taskSchema.methods.addSubTask = function (number, subTask) {
-    const variant = this.getVariantByNumber(number)
+    let variant = this.getVariantByNumber(number)
+    const preAddedTasks = [...variant.subTasks]
     variant.subTasks.push({
         name: subTask.name,
         filePath: subTask.filePath,
         taskText: subTask.taskText,
-        answer: subTask.answer
     })
 
-    return this.save()
+    this.save()
+
+    variant = this.getVariantByNumber(number)
+    if (variant.subTasks.length > 1) {
+        return variant.subTasks.filter(task => !preAddedTasks.includes(task))[0]
+    } else {
+        return variant.subTasks[0]
+    }
 }
 
 taskSchema.methods.getSubTaskById = function (variantId, subTaskId) {
