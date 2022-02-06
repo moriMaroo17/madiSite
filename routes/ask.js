@@ -67,8 +67,8 @@ router.post('/edit', teacherPermission, async (req, res) => {
 
 router.post('/remove', teacherPermission, async (req, res) => {
     try {
-        const ask = await Ask.findById(req.body.id)
-        await Ask.deleteOne()
+        const ask = await Ask.findByIdAndDelete(req.body.id)
+        await Ask.findByIdAndDelete(req.body.id)
         res.redirect(`/task/${ask.taskId}/${ask.variant}/${ask.subTaskId}/edit`)
     } catch (error) {
         console.log(error)
