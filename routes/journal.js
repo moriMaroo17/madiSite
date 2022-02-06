@@ -69,18 +69,13 @@ router.get('/watchTable/:id', teacherPermission, async (req, res) => {
 
 router.get('/watchByStudent/:id', teacherPermission, async (req, res) => {
     try {
-        const student = {
-            name: '',
-            email: '',
-        }
         const answers = await Answer.find({ userId: req.params.id }).populate({ path: 'userId', select: ['name', 'email'] }).populate({ path: 'ask' }).sort({ 'taskId': 1 })
         for (let i = 0; i < answers.length; i++) answers[i] = await answers[i].populateAllTaskFields()
-        student.name = answers[0].userId.name
-        student.email = answers[0].userId.email
+        const user = await User.findById(req.params.id)
         res.render('watchByStudent', {
-            title: `Ответы студента ${student.name}`,
-            student,
-            answers
+            title: `Ответы студента ${user.name}`,
+            answers,
+            user,
         })
     } catch (error) {
         console.log(error)
