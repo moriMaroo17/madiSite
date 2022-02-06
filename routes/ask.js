@@ -1,7 +1,7 @@
 import fs from 'fs'
 import { Router } from 'express'
 import Ask from '../models/ask.js'
-import { teacherPermission} from '../middleware/permission.js'
+import { teacherPermission } from '../middleware/permission.js'
 
 const router = new Router()
 

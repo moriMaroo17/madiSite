@@ -1,0 +1,43 @@
+{{#if isStudent}}
+<ul class="collection with-header">
+    <li class="collection-header">
+        <h4>Общие файлы</h4>
+    </li>
+    {{#each publicFiles}}
+    <li class="collection-item">
+        <a href="/{{filePath}}" download="{{fileName}}">{{fileName}}</a>
+    </li>
+    {{/each}}
+</ul>
+{{/if}}
+{{#if isTeacher}}
+<h5>Общие файлы</h5>
+<table class="highlight" class="col s3">
+    <thead>
+          <tr>
+              <th></th>
+              <th></th>
+          </tr>
+        </thead>
+    <tbody>
+        {{#each publicFiles}}
+        <tr>
+            <td><a href="/{{filePath}}" download="{{fileName}}">{{fileName}}</a></td>
+            <td><form action="/publicFiles/remove" method="post">
+                <input type="hidden" name="id" value="{{_id}}">
+                <button class="btn waves-effect waves-light" type="submit">Удалить</button>
+            </form></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+{{/if}}
+
+
+{{#if isTeacher}}
+<div style="margin-top: 10px">
+    <a href="/publicFiles/add">
+        <button class="btn waves-effect waves-light">Добавить файл</button>
+    </a>
+</div>
+{{/if}}
