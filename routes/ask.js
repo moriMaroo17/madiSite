@@ -17,6 +17,7 @@ router.post('/add', teacherPermission, async (req, res) => {
             taskId: req.body.taskId,
             variant: req.body.number,
             subTaskId: req.body.subId,
+            rightAnswer: '',
             isTable: isTable,
             table: {
                 columns: 0,
@@ -26,7 +27,7 @@ router.post('/add', teacherPermission, async (req, res) => {
 
         const result = await ask.save()
         fs.mkdirSync(`./answers/${result._id}`)
-        res.redirect(`${result._id}/edit`)
+        res.redirect(`/ask/${result._id}/edit`)
     } catch (error) {
         console.log(error)
     }
@@ -48,10 +49,11 @@ router.post('/edit', teacherPermission, async (req, res) => {
     try {
         const ask = await Ask.findById(req.body.askId)
         ask.askText = req.body.askText
-        ask.rightAnswer = req.body.rightAnswer
         if (ask.isTable) {
             ask.table.columns = req.body.columns
             ask.table.rows = req.body.rows
+        } else {
+            ask.rightAnswer = req.body.rightAnswer
         }
         if (!fs.existsSync(`./answers/${ask.id}`)) {
             fs.mkdirSync(`./answers/${ask.id}`)
@@ -66,7 +68,7 @@ router.post('/edit', teacherPermission, async (req, res) => {
 router.post('/remove', teacherPermission, async (req, res) => {
     try {
         const ask = await Ask.findById(req.body.id)
-        await Ask.deleteOne({ _id: req.body.id })
+        await Ask.deleteOne()
         res.redirect(`/task/${ask.taskId}/${ask.variant}/${ask.subTaskId}/edit`)
     } catch (error) {
         console.log(error)
