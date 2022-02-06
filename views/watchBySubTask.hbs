@@ -19,6 +19,7 @@
 </div>
 <hr>
 <table class="highlight result-table">
+    {{#if answers}}
     <thead>
         <tr>
             <th>Имя</th>
@@ -40,6 +41,9 @@
         </tr>
         {{/each}}
     </tbody>
+    {{else}}
+    <h4>Никто еще не ответи по данной теме</h4>
+    {{/if}}
 </table>
 
 <a href="/journal">
