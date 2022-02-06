@@ -1,4 +1,5 @@
 import express from 'express'
+import fs from 'fs'
 import exhbs from 'express-handlebars'
 import { allowInsecurePrototypeAccess } from '@handlebars/allow-prototype-access'
 import { createRequire } from "module";
@@ -87,6 +88,10 @@ function start() {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         })
+
+        if (!fs.existsSync('./docs')) fs.mkdirSync('./docs')
+        if (!fs.existsSync('./publicFiles')) fs.mkdirSync('./publicFiles')
+        if (!fs.existsSync('./answers')) fs.mkdirSync('./answers')
 
         app.listen(PORT, () => {
             console.log(`listening on port ${PORT}`)
