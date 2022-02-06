@@ -31,7 +31,6 @@ router.get('/add', teacherPermission, (req, res) => {
 router.post('/add', teacherPermission, async (req, res) => {
     try {
         let file = req.files.filePath
-        if (!fs.existsSync('./pubilcFiles')) fs.mkdirSync('./publicFiles')
         file.mv(`./publicFiles/${req.files.filePath.name}`, (err) => {
             if (err) {
                 console.log(err)
