@@ -17,16 +17,21 @@
     <tbody>
         {{#each answers}}
         <tr>
-            <td>{{taskId.name}}</td>
-            <td>{{variant}}</td>
-            <td>{{subTaskId.name}}</td>
+            <td>{{ask.taskId.name}}</td>
+            <td>{{ask.variant.number}}</td>
+            <td>{{ask.subTaskId.name}}</td>
+            {{#if ask.isTable}}
+            <td><a href="/journal/watchTable/{{_id}}">Посмотреть таблицу</a></td>
+            <td>Заполнение таблицы</td>
+            {{else}}
             <td>{{answer}}</td>
-            <td>{{subTaskId.answer}}</td>
+            <td>{{ask.rightAnswer}}</td>
+            {{/if}}
         </tr>
         {{/each}}
     </tbody>
 </table>
 
-<a href="../">
+<a href="/journal">
     <button class="btn waves-effect waves-light">Назад</button>
 </a>

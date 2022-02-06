@@ -30,13 +30,18 @@
         {{#each answers}}
         <tr>
             <td><a href="../watchByStudent/{{userId._id}}">{{userId.name}}</a></td>
+            {{#if ask.isTable}}
+            <td><a href="/journal/watchTable/{{_id}}">Посмотреть таблицу</a></td>
+            <td>Заполнение таблицы</td>
+            {{else}}
             <td>{{answer}}</td>
-            <td>{{subTaskId.answer}}</td>
+            <td>{{ask.rightAnswer}}</td>
+            {{/if}}
         </tr>
         {{/each}}
     </tbody>
 </table>
 
-<a href="../">
+<a href="/journal">
     <button class="btn waves-effect waves-light">Назад</button>
 </a>

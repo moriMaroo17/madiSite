@@ -37,6 +37,7 @@ answerSchema.methods.populateAllTaskFields = async function() {
             subTaskId: subTask,
             isTable: this.ask.isTable,
             askText: this.ask.askText,
+            rightAnswer: this.ask.rightAnswer,
         },
         answer: this.answer,
         filePath: this.filePath,
