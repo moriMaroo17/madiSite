@@ -28,8 +28,10 @@ router.get('/:id', studentPermission, async (req, res) => {
             }
         }
         let fileName = ''
-        if (answer.filePath) {
-            fileName = answer.filePath.split('/')[answer.filePath.split('/').length - 1]
+        if (answer) {
+            if (answer.filePath) {
+                fileName = answer.filePath.split('/')[answer.filePath.split('/').length - 1]
+            }
         }
 
         console.log(answer)
