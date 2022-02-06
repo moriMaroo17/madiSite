@@ -12,6 +12,7 @@
             <th>Тема</th>
             <th>Ответ</th>
             <th>Правильный ответ</th>
+            <th>Файл</th>
         </tr>
     </thead>
     <tbody>
@@ -26,6 +27,11 @@
             {{else}}
             <td>{{answer}}</td>
             <td>{{ask.rightAnswer}}</td>
+            {{/if}}
+            {{#if filePath}}
+            <td><a href="/{{filePath}}" download="{{fileName}}">{{fileName}}</a></td>
+            {{else}}
+            <td><i class="material-icons">close</i></td>
             {{/if}}
         </tr>
         {{/each}}

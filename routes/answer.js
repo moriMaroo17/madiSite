@@ -54,7 +54,7 @@ router.post('/', studentPermission, async (req, res) => {
         let filePath = ''
         const answerText = req.body.answer !== undefined ? req.body.answer : ''
         if (!fs.existsSync(`./answers/${ask.id}/${req.session.user._id}/`)) {
-            fs.mkdirSync(`./answers/${ask.id}/${req.session.user._id}/`)
+            fs.mkdirSync(`./answers/${ask.id}/${req.session.user._id}/`, { recursive: true })
         }
         if (req.body.removeFile === 'on' && req.body.answerId) {
             const answer = await Answer.findById(req.body.answerId)

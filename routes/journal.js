@@ -26,12 +26,6 @@ router.get('/', teacherPermission, async (req, res) => {
 router.get('/watchBySubTask/:id', teacherPermission, async (req, res) => {
     try {
         let answers = []
-        // const info = {
-        //     task: '',
-        //     variant: '',
-        //     subTask: '',
-        //     subTaskText: '',
-        // }
         const asks = await Ask.find({ subTaskId: req.params.id })
         const info = await helpers.getInfoBySubTaskId(req.params.id)
         for (let i = 0; i < asks.length; i++) {
@@ -39,6 +33,11 @@ router.get('/watchBySubTask/:id', teacherPermission, async (req, res) => {
             for (let i = 0; i < unpopAnswers.length; i++) unpopAnswers[i] = await unpopAnswers[i].populateAllTaskFields()
             answers = answers.concat(unpopAnswers)
         }
+        answers.map(answer => {
+            if (answer.filePath) {
+                answer.fileName = answer.filePath.split('/')[answer.filePath.split('/').length - 1]
+            }
+        })
         res.render('watchBySubTask', {
             title: `Ответы по теме ${info.subTask}`,
             info,
@@ -67,6 +66,11 @@ router.get('/watchByStudent/:id', teacherPermission, async (req, res) => {
         const answers = await Answer.find({ userId: req.params.id }).populate({ path: 'userId', select: ['name', 'email'] }).populate({ path: 'ask' }).sort({ 'taskId': 1 })
         for (let i = 0; i < answers.length; i++) answers[i] = await answers[i].populateAllTaskFields()
         const user = await User.findById(req.params.id)
+        answers.map(answer => {
+            if (answer.filePath) {
+                answer.fileName = answer.filePath.split('/')[answer.filePath.split('/').length - 1]
+            }
+        })
         res.render('watchByStudent', {
             title: `Ответы студента ${user.name}`,
             answers,
