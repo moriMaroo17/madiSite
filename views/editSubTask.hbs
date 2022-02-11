@@ -1,5 +1,5 @@
 <div class="form-group">
-    <form action="./edit" method="post" enctype="multipart/form-data" id="editSubTaskForm">
+    <form action="/task/{{taskId}}/{{variantId}}/{{subTask.id}}/edit" method="post" enctype="multipart/form-data" id="editSubTaskForm">
         <div class="input-field col s3">
             <input class="form-input" id="name" name="name" type="text" value="{{subTask.name}}" required>
             <label for="name">Название темы</label>
@@ -79,7 +79,7 @@
 
     <form action="/ask/add" method="post" id="addAskForm" class="edit-form">
         <input type="hidden" name="taskId" value="{{@root.taskId}}">
-        <input type="hidden" name="number" value="{{@root.number}}">
+        <input type="hidden" name="variantId" value="{{@root.variantId}}">
         <input type="hidden" name="subId" value="{{@root.subTask.id}}">
         <div class="row">
             <p class="col s2">

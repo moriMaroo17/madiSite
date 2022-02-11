@@ -3,7 +3,7 @@
 
 <div>
     {{#if subTask.filePath}}
-    <p>Прикрепленный файл: <a href="/{{subTask.filePath}}" download="{{subTask.name}}">{{fileName}}</a></p>
+    <p>Прикрепленный файл: <a href="/{{subTask.filePath}}" download="{{fileName}}">{{fileName}}</a></p>
     {{else}}
     <p>Файл для работы не был добавлен</p>
     {{/if}}
@@ -46,7 +46,7 @@
 {{/if}}
 
 <div class="back-button">
-<a href="/task/{{taskId}}/{{variantNumber}}">
+<a href="/task/{{taskId}}/{{variantId}}">
     <button class="btn waves-effect waves-light">Назад</button>
 </a>
 </div>

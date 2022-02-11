@@ -1,6 +1,7 @@
 import fs from 'fs'
 import { Router } from 'express'
 import Ask from '../models/ask.js'
+import Answer from '../models/answer.js'
 import { teacherPermission } from '../middleware/permission.js'
 
 const router = new Router()
@@ -15,7 +16,7 @@ router.post('/add', teacherPermission, async (req, res) => {
         }
         const ask = new Ask({
             taskId: req.body.taskId,
-            variant: req.body.number,
+            variantId: req.body.variantId,
             subTaskId: req.body.subId,
             rightAnswer: '',
             isTable: isTable,
@@ -59,7 +60,7 @@ router.post('/edit', teacherPermission, async (req, res) => {
             fs.mkdirSync(`./answers/${ask.id}`)
         }
         await ask.save()
-        res.redirect(`/task/${ask.taskId}/${ask.variant}/${ask.subTaskId}/edit`)
+        res.redirect(`/task/${ask.taskId}/${ask.variantId}/${ask.subTaskId}/edit`)
     } catch (error) {
         console.log(error)
     }
@@ -67,8 +68,13 @@ router.post('/edit', teacherPermission, async (req, res) => {
 
 router.post('/remove', teacherPermission, async (req, res) => {
     try {
-        const ask = await Ask.findByIdAndDelete(req.body.id)
+        const ask = await Ask.findById(req.body.id)
         await Ask.findByIdAndDelete(req.body.id)
+        const answers = await Answer.find({ask: ask._id})
+        answers.forEach(answer => {
+            fs.rmdirSync(`./answers/${answer.ask._id}`, { recursive: true, force: true })
+        })
+        await Answer.deleteMany({ask: ask._id})
         res.redirect(`/task/${ask.taskId}/${ask.variant}/${ask.subTaskId}/edit`)
     } catch (error) {
         console.log(error)

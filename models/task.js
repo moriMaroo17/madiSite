@@ -5,7 +5,6 @@ const taskSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
-        unique: true
     },
     filePath: String,
     variants: [{
@@ -19,7 +18,6 @@ const taskSchema = new mongoose.Schema({
                 name: {
                     type: String,
                     required: true,
-                    unique: true
                 },
                 taskText: String,
                 filePath: String,
@@ -44,8 +42,8 @@ taskSchema.methods.getVariantById = function (id) {
     }
 }
 
-taskSchema.methods.addSubTask = function (number, subTask) {
-    let variant = this.getVariantByNumber(number)
+taskSchema.methods.addSubTask = function (variantId, subTask) {
+    let variant = this.getVariantById(variantId)
     const preAddedTasks = [...variant.subTasks]
     variant.subTasks.push({
         name: subTask.name,
@@ -55,11 +53,26 @@ taskSchema.methods.addSubTask = function (number, subTask) {
 
     this.save()
 
-    variant = this.getVariantByNumber(number)
+    variant = this.getVariantById(variantId)
     if (variant.subTasks.length > 1) {
         return variant.subTasks.filter(task => !preAddedTasks.includes(task))[0]
     } else {
         return variant.subTasks[0]
+    }
+}
+
+taskSchema.methods.addVariant = function (number) {
+    const preAddedVariants = [...this.variants]
+    this.variants.push({
+        number: number,
+        filePath: '',
+        subTasks: []
+    })
+    this.save()
+    if (this.variants.length > 1) {
+        return this.varinats.filter(variant => !preAddedVariants.includes(variant))
+    } else {
+        return this.variants[0]
     }
 }
 
@@ -87,8 +100,8 @@ taskSchema.methods.deleteVariantById = function (id) {
     return this.save()
 }
 
-taskSchema.methods.updateVaraintByNumber = function (oldNumber, newNumber, filePath) {
-    const variant = this.getVariantByNumber(oldNumber)
+taskSchema.methods.updateVaraintById = function (variantId, newNumber, filePath) {
+    const variant = this.getVariantById(variantId)
     if (newNumber !== undefined && newNumber !== variant.number) {
         variant.number = newNumber
     }
@@ -104,8 +117,8 @@ taskSchema.methods.updateVaraintByNumber = function (oldNumber, newNumber, fileP
     }
 }
 
-taskSchema.methods.updateSubTaskById = function (number, subId, name, taskText, filePath, answer) {
-    const variant = this.getVariantByNumber(number)
+taskSchema.methods.updateSubTaskById = function (variantId, subId, name, taskText, filePath) {
+    const variant = this.getVariantById(variantId)
     const subTask = this.getSubTaskById(variant.id, subId)
     if (name !== undefined && name !== subTask.name) {
         subTask.name = name
@@ -116,9 +129,9 @@ taskSchema.methods.updateSubTaskById = function (number, subId, name, taskText, 
     if (filePath !== undefined && filePath !== subTask.filePath) {
         subTask.filePath = filePath
     }
-    if (answer !== undefined && answer !== subTask.answer) {
-        subTask.answer = answer
-    }
+    // if (answer !== undefined && answer !== subTask.answer) {
+    //     subTask.answer = answer
+    // }
     for (var i = 0; i < variant.subTasks.length; i++) {
         if (variant.subTasks[i].id === subTask.id) {
             variant.subTasks[i] = subTask

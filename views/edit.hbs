@@ -37,13 +37,13 @@
                     class="edit-variant-on-main-form">
                     <input type="hidden" name="taskId" value="{{@root.task.id}}">
                     <input type="hidden" name="variantId" value="{{id}}">
-                    <input type="hidden" name="number" value="{{number}}">
+                    {{!-- <input type="hidden" name="number" value="{{number}}"> --}}
                     <button class="btn btn-primary red btn-action btn-lg" form="removeVariantForm{{@index}}">
                         Удалить вариант
                     </button>
                 </form>
 
-                <a href="/task/{{@root.task.id}}/{{number}}/edit">
+                <a href="/task/{{@root.task.id}}/{{_id}}/edit">
                     <button class="btn btn-primary btn-action btn-lg">
                         Редактировать вариант
                     </button>
@@ -67,13 +67,13 @@
                             <td>{{name}}</td>
                             <td>{{answer}}</td>
                             <td>
-                                <form method="post" id="removeSubTaskForm{{@index}}" action="/task/removeSubTask">
+                                <form method="post" id="removeSubTaskForm{{@../index}}{{@index}}" action="/task/removeSubTask">
                                     <input type="hidden" name="id" value="{{@root.task.id}}">
                                     <input type="hidden" name="subTaskId" value="{{id}}">
                                     <input type="hidden" name="variantId", value="{{../id}}">
-                                    <input type="hidden" name="subTaskName" value="{{name}}">
+                                    <input type="hidden" name="subTaskId" value="{{_id}}">
                                     <button class="btn btn-primary btn-action btn-lg"
-                                        form="removeSubTaskForm{{@index}}">
+                                        form="removeSubTaskForm{{@../index}}{{@index}}">
                                         <i class="material-icons dp48">delete_forever</i>
                                     </button>
                                 </form>

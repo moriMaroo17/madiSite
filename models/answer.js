@@ -1,7 +1,6 @@
 import mongoose from 'mongoose'
 
 import Task from './task.js'
-import Ask from '../models/ask.js'
 
 const answerSchema = new mongoose.Schema({
     userId: {
@@ -25,7 +24,7 @@ answerSchema.methods.populateAllTaskFields = async function() {
     // const ask = await Ask.findById(this.ask)
     // use only after populate ask
     const task = await Task.findById(this.ask.taskId)
-    const variant = await task.getVariantByNumber(this.ask.variant)
+    const variant = await task.getVariantById(this.ask.variantId)
     const subTask = await task.getSubTaskById(variant.id, this.ask.subTaskId)
     return {
         _id: this._id,

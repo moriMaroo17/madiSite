@@ -10,7 +10,20 @@ const router = new Router()
 router.post('/remove', teacherPermission, async (req, res) => {
     try {
         const task = await Task.findById(req.body.id)
-        fs.rmSync(`./docs/${task.name}`, { recursive: true, force: true })
+        task.variants.forEach(variant => {
+            variant.subTasks.forEach(async subTask => {
+                const asks = await Ask.find({ subTaskId: subTask._id })
+                asks.forEach(async ask => {
+                    const answers = await Answer.find({ ask: ask._id })
+                    answers.forEach(answer => {
+                        fs.rmdirSync(`./answers/${answer.ask._id}`, { recursive: true, force: true })
+                    })
+                    await Answer.deleteMany({ ask: ask._id })
+                })
+                await Ask.deleteMany({ subTaskId: req.body.subTaskId })
+            })
+        })
+        fs.rmSync(`./docs/${task._id}`, { recursive: true, force: true })
         await Task.deleteOne({ _id: req.body.id })
         res.redirect('/')
     } catch (error) {
@@ -22,8 +35,17 @@ router.post('/removeSubTask', teacherPermission, async (req, res) => {
     try {
         const task = await Task.findById(req.body.id)
         const variant = await task.getVariantById(req.body.variantId)
-        fs.rmSync(`./docs/${task.name}/${variant.number}/${req.body.subTaskName}`, { recursive: true, force: true })
+        fs.rmSync(`./docs/${task._id}/${variant._id}/${req.body.subTaskName}`, { recursive: true, force: true })
         await task.deleteSubTaskById(req.body.variantId, req.body.subTaskId)
+        const asks = await Ask.find({ subTaskId: req.body.subTaskId })
+        asks.forEach(async ask => {
+            const answers = await Answer.find({ ask: ask._id })
+            answers.forEach(answer => {
+                fs.rmdirSync(`./answers/${answer.ask._id}`, { recursive: true, force: true })
+            })
+            await Answer.deleteMany({ ask: ask._id })
+        })
+        await Ask.deleteMany({ subTaskId: req.body.subTaskId })
         res.redirect(`/task/${req.body.id}/edit`)
     } catch (error) {
         console.error(error)
@@ -47,10 +69,10 @@ router.get('/:id/edit', teacherPermission, async (req, res) => {
     }
 })
 
-router.get('/:id/:number/edit', teacherPermission, async (req, res) => {
+router.get('/:id/:variantId/edit', teacherPermission, async (req, res) => {
     try {
         const task = await Task.findById(req.params.id)
-        const variant = await task.getVariantByNumber(req.params.number)
+        const variant = await task.getVariantById(req.params.variantId)
         let fileName = ''
         if (variant.filePath) {
             fileName = variant.filePath.split('/')[variant.filePath.split('/').length - 1]
@@ -66,15 +88,15 @@ router.get('/:id/:number/edit', teacherPermission, async (req, res) => {
     }
 })
 
-router.post('/:id/:number/editVariant', teacherPermission, async (req, res) => {
+router.post('/:id/:variantId/editVariant', teacherPermission, async (req, res) => {
     try {
         const task = await Task.findById(req.params.id)
-        const variant = await task.getVariantByNumber(req.params.number)
+        const variant = await task.getVariantById(req.params.variantId)
         let filePath = variant.filePath
-        if (!fs.existsSync(`./docs/${task.name}/${req.body.number}/`)) {
-            fs.mkdirSync(`./docs/${task.name}/${req.body.number}/`, { recursive: true })
+        if (!fs.existsSync(`./docs/${task._id}/${req.body.variantId}/`)) {
+            fs.mkdirSync(`./docs/${task._id}/${req.body.variantId}/`, { recursive: true })
         }
-        fs.renameSync(`./docs/${task.name}/${variant.number}/`, `./docs/${task.name}/${req.params.number}/`)
+        // fs.renameSync(`./docs/${task._id}/${variant.variantId}/`, `./docs/${task._id}/${req.params.number}/`)
         if (req.body.removeFile === 'on') {
             fs.rmSync(variant.filePath, { recursive: true, force: true })
             filePath = ''
@@ -84,15 +106,15 @@ router.post('/:id/:number/editVariant', teacherPermission, async (req, res) => {
             if (fs.existsSync(variant.filePath)) {
                 fs.rmSync(variant.filePath, { recursive: true, force: true })
             }
-            file.mv(`./docs/${task.name}/${req.body.number}/${req.files.filePath.name}`, (err) => {
+            file.mv(`./docs/${task._id}/${req.body.number}/${req.files.filePath.name}`, (err) => {
                 if (err) {
                     console.log(err)
                 }
             })
-            filePath = `./docs/${task.name}/${req.body.number}/${req.files.filePath.name}`
+            filePath = `./docs/${task._id}/${req.body.number}/${req.files.filePath.name}`
         }
 
-        await task.updateVaraintByNumber(req.params.number, req.body.number, filePath)
+        await task.updateVaraintById(req.params.variantId, req.body.number, filePath)
     } catch (error) {
         console.error(error)
     }
@@ -102,46 +124,44 @@ router.post('/:id/:number/editVariant', teacherPermission, async (req, res) => {
 router.post('/:id/addVariant', teacherPermission, async (req, res) => {
     try {
         const task = await Task.findById(req.params.id)
-        if (!fs.existsSync(`./docs/${task.name}/${req.body.number}/`)) {
-            fs.mkdirSync(`./docs/${task.name}/${req.body.number}/`, { recursive: true })
+        const variant = await task.addVariant(req.body.number)
+        if (!fs.existsSync(`./docs/${task._id}/${variant._id}/`)) {
+            fs.mkdirSync(`./docs/${task._id}/${variant._id}/`, { recursive: true })
         }
-        task.variants.push({
-            number: req.body.number,
-            filePath: '',
-            subTasks: []
-        })
-        await task.save()
-        res.redirect(`/task/${req.params.id}/${req.body.number}/edit`)
+        
+        // await task.save()
+        res.redirect(`/task/${req.params.id}/${variant._id}/edit`)
     } catch (error) {
         console.log(error)
     }
 })
 
-router.post('/:id/:number/addSubTask', teacherPermission, async (req, res) => {
+router.post('/:id/:variantId/addSubTask', teacherPermission, async (req, res) => {
     try {
         const task = await Task.findById(req.params.id)
-        if (!fs.existsSync(`./docs/${task.name}/${req.params.number}/${req.body.name}/`)) {
-            fs.mkdirSync(`./docs/${task.name}/${req.params.number}/${req.body.name}/`, { require: true })
-        }
-        const result = await task.addSubTask(req.params.number, {
+        
+        const subTask = await task.addSubTask(req.params.variantId, {
             name: req.body.name,
             filePath: '',
             taskText: '',
             asks: []
         })
-        console.log(result)
-        res.redirect(`/task/${req.params.id}/${req.params.number}/${result._id}/edit`)
+        console.log(subTask)
+        if (!fs.existsSync(`./docs/${task._id}/${req.params.variantId}/${subTask._id}/`)) {
+            fs.mkdirSync(`./docs/${task._id}/${req.params.variantId}/${subTask._id}/`, { require: true })
+        }
+        res.redirect(`/task/${req.params.id}/${req.params.variantId}/${subTask._id}/edit`)
     } catch (error) {
         console.log(error)
     }
 })
 
-router.get('/:id/:number/:subId/edit', teacherPermission, async (req, res) => {
+router.get('/:id/:variantId/:subId/edit', teacherPermission, async (req, res) => {
     try {
         const task = await Task.findById(req.params.id)
-        const variant = await task.getVariantByNumber(req.params.number)
-        const subTask = await task.getSubTaskById(variant.id, req.params.subId)
-        const asks = await Ask.find({ taskId: req.params.id, variant: req.params.number, subTaskId: req.params.subId })
+        // const variant = await task.getVariantById(req.params.variantId)
+        const subTask = await task.getSubTaskById(req.params.variantId, req.params.subId)
+        const asks = await Ask.find({ taskId: req.params.id, variantId: req.params.variantId, subTaskId: req.params.subId })
         asks.map(ask => {
             ask.size = `${ask.table.columns} X ${ask.table.rows}`
         })
@@ -151,7 +171,7 @@ router.get('/:id/:number/:subId/edit', teacherPermission, async (req, res) => {
         }
         res.render('editSubTask', {
             taskId: task.id,
-            number: variant.number,
+            variantId: req.params.variantId,
             subTask,
             fileName,
             asks
@@ -161,16 +181,16 @@ router.get('/:id/:number/:subId/edit', teacherPermission, async (req, res) => {
     }
 })
 
-router.post('/:id/:number/:subId/edit', teacherPermission, async (req, res) => {
+router.post('/:id/:variantId/:subId/edit', teacherPermission, async (req, res) => {
     try {
         const task = await Task.findById(req.params.id)
-        const variant = await task.getVariantByNumber(req.params.number)
-        const subTask = await task.getSubTaskById(variant.id, req.params.subId)
+        // const variant = await task.getVariantById(req.params.variantId)
+        const subTask = await task.getSubTaskById(req.params.variantId, req.params.subId)
         let filePath = subTask.filePath
-        if (!fs.existsSync(`./docs/${task.name}/${req.params.number}/${req.body.name}/`)) {
-            fs.mkdirSync(`./docs/${task.name}/${req.params.number}/${req.body.name}/`, { recursive: true });
+        if (!fs.existsSync(`./docs/${task._id}/${req.params.variantId}/${subTask._id}/`)) {
+            fs.mkdirSync(`./docs/${task._id}/${req.params.variantId}/${subTask._id}/`, { recursive: true });
         }
-        fs.renameSync(`./docs/${task.name}/${req.params.number}/${subTask.name}/`, `./docs/${task.name}/${req.params.number}/${req.body.name}/`)
+        // fs.renameSync(`./docs/${task._id}/${req.params.number}/${subTask.name}/`, `./docs/${task._id}/${req.params.number}/${subTask._id}/`)
         if (req.body.removeFile === 'on') {
             fs.rmSync(subTask.filePath, { recursive: true, force: true })
             filePath = ''
@@ -179,16 +199,16 @@ router.post('/:id/:number/:subId/edit', teacherPermission, async (req, res) => {
             if (fs.existsSync(subTask.filePath)) {
                 fs.rmSync(subTask.filePath, { recursive: true, force: true })
             }
-            file.mv(`./docs/${task.name}/${req.params.number}/${req.body.name}/${req.files.filePath.name}`, (err) => {
+            file.mv(`./docs/${task._id}/${req.params.variantId}/${subTask._id}/${req.files.filePath.name}`, (err) => {
                 if (err) {
                     console.log(err)
                 }
             })
-            filePath = `./docs/${task.name}/${req.params.number}/${req.body.name}/${req.files.filePath.name}`
+            filePath = `./docs/${task._id}/${req.params.variantId }/${subTask._id}/${req.files.filePath.name}`
         }
 
-        await task.updateSubTaskById(req.params.number, req.params.subId, req.body.name, req.body.taskText, filePath, req.body.answer)
-        res.redirect(`/task/${req.params.id}/${req.params.number}/edit`)
+        await task.updateSubTaskById(req.params.variantId, req.params.subId, req.body.name, req.body.taskText, filePath)
+        res.redirect(`/task/${req.params.id}/${req.params.variantId}/edit`)
     } catch (error) {
         console.log(error)
     }
@@ -197,8 +217,20 @@ router.post('/:id/:number/:subId/edit', teacherPermission, async (req, res) => {
 router.post('/removeVariant', teacherPermission, async (req, res) => {
     try {
         const task = await Task.findById(req.body.taskId)
+        const variant = await task.getVariantById(req.body.variantId)
+        variant.subTasks.forEach(async subTask => {
+            const asks = await Ask.find({ subTaskId: subTask._id })
+            asks.forEach(async ask => {
+                const answers = await Answer.find({ ask: ask._id })
+                answers.forEach(answer => {
+                    fs.rmdirSync(`./answers/${answer.ask._id}`, { recursive: true, force: true })
+                })
+                await Answer.deleteMany({ ask: ask._id })
+            })
+            await Ask.deleteMany({ subTaskId: req.body.subTaskId })
+        })
         await task.deleteVariantById(req.body.variantId)
-        fs.rmSync(`./docs/${task.name}/${req.body.number}`, { recursive: true, force: true })
+        fs.rmSync(`./docs/${task._id}/${req.body.number}`, { recursive: true, force: true })
         res.redirect(`/task/${req.body.taskId}/edit`)
     } catch (error) {
         console.log(error)
@@ -208,10 +240,10 @@ router.post('/removeVariant', teacherPermission, async (req, res) => {
 router.post('/edit', teacherPermission, async (req, res) => {
     try {
         const task = await Task.findById(req.body.id)
-        if (!fs.existsSync(`./docs/${task.name}/`)) {
-            fs.mkdirSync(`./docs/${task.name}/`, { recursive: true });
+        if (!fs.existsSync(`./docs/${task._id}/`)) {
+            fs.mkdirSync(`./docs/${task._id}/`, { recursive: true });
         }
-        fs.renameSync(`docs/${task.name}/`, `docs/${req.body.name}`)
+        // fs.renameSync(`docs/${task.name}/`, `docs/${req.body.name}`)
         task.name = req.body.name
         if (req.body.removeFile === 'on') {
             fs.rmSync(task.filePath, { recursive: true, force: true })
@@ -221,12 +253,12 @@ router.post('/edit', teacherPermission, async (req, res) => {
             if (fs.existsSync(task.filePath)) {
                 fs.rmSync(task.filePath, { recursive: true, force: true })
             }
-            file.mv(`./docs/${task.name}/${req.files.filePath.name}`, (err) => {
+            file.mv(`./docs/${task._id}/${req.files.filePath.name}`, (err) => {
                 if (err) {
                     console.log(err)
                 }
             })
-            task.filePath = `./docs/${task.name}/${req.files.filePath.name}`
+            task.filePath = `./docs/${task._id}/${req.files.filePath.name}`
         }
 
         await task.save()
@@ -239,23 +271,27 @@ router.post('/edit', teacherPermission, async (req, res) => {
 router.get('/:id', studentPermission, async (req, res) => {
     try {
         const task = await Task.findById(req.params.id)
-        const fileNameArr = task.filePath.split('/')
+        let fileName = ''
+        if (task.filePath) {
+            fileName = task.filePath.split('/')[subTask.filePath.split('/').length - 1]
+        }
+        // const fileNameArr = task.filePath.split('/')
         res.render('task', {
             title: task.name,
             task: task,
-            fileName: fileNameArr[fileNameArr.length - 1]
+            fileName: fileName
         })
     } catch (error) {
         console.error(error)
     }
 })
 
-router.get('/:id/:number/:subId', studentPermission, async (req, res) => {
+router.get('/:id/:variantId/:subId', studentPermission, async (req, res) => {
     try {
         const task = await Task.findById(req.params.id)
-        const variant = await task.getVariantByNumber(req.params.number)
-        const subTask = await task.getSubTaskById(variant.id, req.params.subId)
-        const asks = await Ask.find({ taskId: task.id, variant: variant.number, subTaskId: subTask.id })
+        // const variant = await task.getVariantByNumber(req.params.variantId)
+        const subTask = await task.getSubTaskById(req.params.variantId, req.params.subId)
+        const asks = await Ask.find({ taskId: task.id, variantId: req.params.variantId, subTaskId: subTask.id })
         // const answer = await Answer.findOne({userId: req.session.user._id, taskId: req.params.id, variant: req.params.number, subTaskId: req.params.subId})
         let fileName = ''
         if (subTask.filePath) {
@@ -263,7 +299,7 @@ router.get('/:id/:number/:subId', studentPermission, async (req, res) => {
         }
         res.render('subTask', {
             taskId: task.id,
-            variantNumber: variant.number,
+            variantId: req.params.variantId,
             subTask,
             fileName,
             asks
@@ -273,16 +309,19 @@ router.get('/:id/:number/:subId', studentPermission, async (req, res) => {
     }
 })
 
-router.get('/:id/:number', studentPermission, async (req, res) => {
+router.get('/:id/:variantId', studentPermission, async (req, res) => {
     try {
         const task = await Task.findById(req.params.id)
-        const variant = await task.getVariantByNumber(req.params.number)
-        const fileNameArr = variant.filePath.split('/')
+        const variant = await task.getVariantById(req.params.variantId)
+        let fileName = ''
+        if (variant.filePath) {
+            fileName = variant.filePath.split('/')[variant.filePath.split('/').length - 1]
+        }
         res.render('variant', {
-            title: `Вариант ${req.params.number}`,
+            title: `Вариант ${variant.number}`,
             taskId: task.id,
             variant,
-            fileName: fileNameArr[fileNameArr.length - 1]
+            fileName: fileName
         })
     } catch (error) {
         console.log(error)
