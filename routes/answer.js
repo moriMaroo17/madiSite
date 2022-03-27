@@ -119,7 +119,7 @@ router.post('/', studentPermission, async (req, res) => {
             })
             await answer.save()
         }
-        res.redirect(`/task/${ask.taskId}/${ask.variant}/${ask.subTaskId}`)
+        res.redirect(`/task/${ask.taskId}/${ask.variantId}/${ask.subTaskId}`)
     } catch (error) {
         console.error(error)
     }

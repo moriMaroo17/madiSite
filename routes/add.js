@@ -13,27 +13,28 @@ router.get('/', teacherPermission, (req, res) => {
 
 router.post('/', teacherPermission, async (req, res) => {
     try {
-        if (!fs.existsSync(`./docs/${req.body.name}/`)){
-            fs.mkdirSync(`./docs/${req.body.name}/`);
+        const task = new Task({
+            name: req.body.name,
+            filePath: filePath,
+            variants: []
+        })
+        const result = await task.save()
+        if (!fs.existsSync(`./docs/${result._id}/`)){
+            fs.mkdirSync(`./docs/${result._id}/`);
         }
         if (req.files) {
             let file = req.files.filePath 
-            file.mv(`./docs/${req.body.name}/${req.files.filePath.name}`, (err) => {
+            file.mv(`./docs/${result._id}/${req.files.filePath.name}`, (err) => {
                 if (err) {
                     console.log(err)
                 }
             })
-            var filePath = `./docs/${req.body.name}/${req.files.filePath.name}`
+            var filePath = `./docs/${result._id}/${req.files.filePath.name}`
         } else {
             var filePath =''
         }
-        const task = new Task({
-            name: req.body.name,
-            filePath: filePath,
-            content: req.body.content
-        })
-        await task.save()
-        res.redirect(`task/${task.id}/edit`)
+        
+        res.redirect(`task/${result._id}/edit`)
     } catch (error) {
         console.log(error)
     }

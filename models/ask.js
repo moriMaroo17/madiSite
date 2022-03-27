@@ -1,15 +1,14 @@
 import mongoose from 'mongoose'
 
-import Task from './task.js'
-
 const askSchema = new mongoose.Schema({
     taskId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Task',
         required: true
     },
-    variant: {
-        type: Number,
+    variantId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Task',
         required: true
     },
     subTaskId: {

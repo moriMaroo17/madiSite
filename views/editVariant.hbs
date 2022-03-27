@@ -1,5 +1,5 @@
 <div class="form-group">
-    <form action="/task/{{id}}/{{variant.number}}/editVariant" method="post" enctype="multipart/form-data"
+    <form action="/task/{{id}}/{{variant._id}}/editVariant" method="post" enctype="multipart/form-data"
         name="addVariantForm">
         <div class="input-field col s6">
             <input class="form-input" id="number" name="number" type="number" value="{{variant.number}}" required>
@@ -46,7 +46,7 @@
                 <tr class="active">
                     <td>{{name}}</td>
                     <td>{{answer}}</td>
-                    <td><a href="/task/{{@root.id}}/{{@root.variant.number}}/{{_id}}/edit"><button
+                    <td><a href="/task/{{@root.id}}/{{@root.variant._id}}/{{_id}}/edit"><button
                                 class="btn waves-effect waves-light">Редактировать</button></a></td>
                     <td>
                         <form method="post" id="removeSubTaskForm{{@index}}" action="/task/removeSubTask">
@@ -67,7 +67,7 @@
     <h4>Тем для варианта еще не добавлено</h4>
     {{/if}}
 
-    <form action="/task/{{id}}/{{variant.number}}/addSubTask" method="post" class="edit-form">
+    <form action="/task/{{id}}/{{variant._id}}/addSubTask" method="post" class="edit-form">
         <div class="row">
             <div class="input-field col s6">
                 <input id="name" name="name" type="text" required>
