@@ -69,13 +69,14 @@ router.post('/edit', teacherPermission, async (req, res) => {
 router.post('/remove', teacherPermission, async (req, res) => {
     try {
         const ask = await Ask.findById(req.body.id)
+        console.log(ask)
         await Ask.findByIdAndDelete(req.body.id)
         const answers = await Answer.find({ask: ask._id})
         answers.forEach(answer => {
             fs.rmdirSync(`./answers/${answer.ask._id}`, { recursive: true, force: true })
         })
         await Answer.deleteMany({ask: ask._id})
-        res.redirect(`/task/${ask.taskId}/${ask.variant}/${ask.subTaskId}/edit`)
+        res.redirect(`/task/${ask.taskId}/${ask.variantId}/${ask.subTaskId}/edit`)
     } catch (error) {
         console.log(error)
     }

@@ -273,7 +273,7 @@ router.get('/:id', studentPermission, async (req, res) => {
         const task = await Task.findById(req.params.id)
         let fileName = ''
         if (task.filePath) {
-            fileName = task.filePath.split('/')[subTask.filePath.split('/').length - 1]
+            fileName = task.filePath.split('/')[task.filePath.split('/').length - 1]
         }
         // const fileNameArr = task.filePath.split('/')
         res.render('task', {

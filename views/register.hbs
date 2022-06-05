@@ -24,13 +24,13 @@
                     <span class="helper-text" data-error="Пароль"></span>
                 </div>
 
+                {{#if isAdmin}}
                 <div class="input-field">
                     <input id="name" name="name" type="text" class="validate" required>
-                    <label for="name">Ваше имя</label>
+                    <label for="name">Имя пользователя</label>
                     <span class="helper-text" data-error="Введите имя"></span>
                 </div>
 
-                {{#if isAdmin}}
                 <h6>Роль пользователя</h6>
                 <p>
                     <label>
@@ -50,11 +50,22 @@
                         <span>Администратор</span>
                     </label>
                 </p>
-                {{/if}}
+
+                <input type="hidden" name="_csrf" value="{{csrf}}">
+
+                <button class="btn btn-primary" type="submit">Зарегестрировать</button>
+                {{else}}
+                <div class="input-field">
+                    <input id="name" name="name" type="text" class="validate" required>
+                    <label for="name">Ваше имя</label>
+                    <span class="helper-text" data-error="Введите имя"></span>
+                </div>
 
                 <input type="hidden" name="_csrf" value="{{csrf}}">
 
                 <button class="btn btn-primary" type="submit">Зарегестрироваться</button>
+
+                {{/if}}
             </form>
         </div>
     </div>

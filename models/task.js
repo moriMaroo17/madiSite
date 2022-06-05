@@ -36,6 +36,7 @@ taskSchema.methods.getVariantByNumber = function (number) {
 
 taskSchema.methods.getVariantById = function (id) {
     for (let i = 0; i < this.variants.length; i++) {
+        console.log(`${this.variants[i].id.toString()} -- ${id.toString()}`)
         if (this.variants[i].id.toString() === id.toString()) {
             return this.variants[i]
         }

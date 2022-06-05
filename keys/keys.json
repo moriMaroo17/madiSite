@@ -1,4 +1,4 @@
 {
-    "MONGODB_URI": "mongodb+srv://admin:admin@cluster0.ze7oj.mongodb.net/madiSite?retryWrites=true&w=majority",
+    "MONGODB_URI": "mongodb://localhost:27017/diploma",
     "SESSION_SECRET": "topsecret"
 }

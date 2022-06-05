@@ -15,7 +15,7 @@ router.post('/', teacherPermission, async (req, res) => {
     try {
         const task = new Task({
             name: req.body.name,
-            filePath: filePath,
+            filePath: "",
             variants: []
         })
         const result = await task.save()
@@ -33,7 +33,7 @@ router.post('/', teacherPermission, async (req, res) => {
         } else {
             var filePath =''
         }
-        
+        await Task.updateOne({'_id': result._id}, {'filePath': filePath})
         res.redirect(`task/${result._id}/edit`)
     } catch (error) {
         console.log(error)
