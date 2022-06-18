@@ -64,3 +64,8 @@
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
 }
+
+.reset-button {
+    min-height: 30px;
+    width: 180px;
+}
